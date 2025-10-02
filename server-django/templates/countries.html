@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Strona Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div>
+        {% for item in countries %}
+            <div style="display:flex; margin:10px; flex-direction:row;">
+                <div><img width="150" height="100" src="{{ item.flag }}#svgView(preserveAspectRatio(none))"/>{{ item.name }}</div>
+            </div>
+            <a>----------------------------------------------------------</a>
+        {% endfor %}
+        <div>----------------------------------------------------------</div>
+    </div>
+</body>
+</html>

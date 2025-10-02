@@ -1,9 +1,9 @@
 import requests
 from django.shortcuts import render
-from currency_api.models import Currency
+from currency_api.models import Currency,Country
 from django.http import HttpResponse,JsonResponse,Http404
 from pprint import pprint
-from .serializers import CurrencySerializer
+from .serializers import CurrencySerializer,CountrySerializer
 from rest_framework.response import Response
 from rest_framework import status,permissions,mixins,generics,viewsets
 from rest_framework.decorators import api_view, permission_classes
@@ -188,6 +188,14 @@ class CurrenciesViewSet (viewsets.ModelViewSet):
     serializer_class = CurrencySerializer
     permission_classes = (permissions.AllowAny,)
 
+
+class CountryViewSet (viewsets.ModelViewSet):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
+    permission_classes = (permissions.AllowAny,)
+
+def test(request):
+    return render(request, 'countries.html', {'countries': Country.objects.all()})
 
 def nbp_api(request):
     """
