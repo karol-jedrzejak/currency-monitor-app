@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:14 # Wybrana stabilna wersja
+    container_name: postgres_db
+    restart: always
+    environment:
+      # --- Ustawienia dla PostgreSQL ---
+      POSTGRES_PASSWORD: mypassword # Hasło do bazy danych postgres/postgres
+    ports:
+      - "5432:5432" # Mapowanie portu: HOST:CONTAINER
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/ # Utrzymywanie danych
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    environment:
+      # --- Ustawienia dla pgAdmin ---
+      PGADMIN_DEFAULT_EMAIL: test@test.pl # Email logowania
+      PGADMIN_DEFAULT_PASSWORD: test # Hasło logowania
+    ports:
+      - "5050:80" # Dostęp do pgAdmin na porcie 5050 hosta (http://localhost:5050)
+    depends_on:
+      - db # pgAdmin uruchomi się po bazie danych
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+volumes:
+  postgres_data:
+  pgadmin_data:
