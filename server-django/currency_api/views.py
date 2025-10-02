@@ -5,7 +5,7 @@ from django.http import HttpResponse,JsonResponse,Http404
 from pprint import pprint
 from .serializers import CurrencySerializer
 from rest_framework.response import Response
-from rest_framework import status,permissions
+from rest_framework import status,permissions,mixins,generics,viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 
@@ -59,6 +59,8 @@ def currency_type(request,id):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+"""
+# ClassView
 class CurrenciesClassView(APIView):
     permission_classes = (permissions.AllowAny,)
 
@@ -74,6 +76,7 @@ class CurrenciesClassView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# ClassView
 class CurrencyClassView(APIView):
     permission_classes = (permissions.AllowAny,)
 
@@ -100,13 +103,90 @@ class CurrencyClassView(APIView):
         currency = self.get_object(id)
         currency.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+ """
 
+""" 
+# Mixins
+class CurrenciesClassView(mixins.ListModelMixin,mixins.CreateModelMixin, generics.GenericAPIView):
+    queryset = Currency.objects.all()
+    serializer_class = CurrencySerializer
+    permission_classes = (permissions.AllowAny,)
 
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+# Mixins
+class CurrencyClassView(mixins.RetrieveModelMixin,mixins.UpdateModelMixin,mixins.DestroyModelMixin, generics.GenericAPIView):
+    queryset = Currency.objects.all()
+    serializer_class = CurrencySerializer
+    permission_classes = (permissions.AllowAny,)
 
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+    
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+    
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+ """
 
+""" # Generic Views
+class CurrenciesClassView(generics.ListCreateAPIView):
+    queryset = Currency.objects.all()
+    serializer_class = CurrencySerializer
+    permission_classes = (permissions.AllowAny,)
 
+# Generic Views
+class CurrencyClassView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Currency.objects.all()
+    serializer_class = CurrencySerializer
+    permission_classes = (permissions.AllowAny,) """
 
+""" 
+class CurrenciesViewSet (viewsets.ModelViewSet):
+    def list(self, request):
+        queryset = Currency.objects.all()
+        serializer = CurrencySerializer(queryset, many=True)
+        return Response(serializer.data)
+    def create(self, request):
+        serializer = CurrencySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def retrieve(self, request, id=None):
+        try:
+            currency = Currency.objects.get(id=id)
+        except Currency.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = CurrencySerializer(currency)
+        return Response(serializer.data)
+    def update(self, request, id=None):
+        try:
+            currency = Currency.objects.get(id=id)
+        except Currency.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = CurrencySerializer(currency, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def destroy(self, request, id=None):
+        try:
+            currency = Currency.objects.get(id=id)
+        except Currency.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        currency.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+"""
 
+class CurrenciesViewSet (viewsets.ModelViewSet):
+    queryset = Currency.objects.all()
+    serializer_class = CurrencySerializer
+    permission_classes = (permissions.AllowAny,)
 
 
 def nbp_api(request):
