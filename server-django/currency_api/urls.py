@@ -6,5 +6,6 @@ urlpatterns = [
     path("types", views.currency_types, name="types"),
     path("types/<int:id>/", views.currency_type, name="type"),
 
-    path("types_cv/", views.CurrencyClassView.as_view(), name="type_cv"),
+    path("types_cv/", views.CurrenciesClassView.as_view(), name="type_cv"),
+    path("types_cv/<int:id>/", views.CurrencyClassView.as_view(), name="type_cv"),
 ]

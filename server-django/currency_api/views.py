@@ -1,13 +1,14 @@
 import requests
 from django.shortcuts import render
 from currency_api.models import Currency
-from django.http import HttpResponse,JsonResponse
+from django.http import HttpResponse,JsonResponse,Http404
 from pprint import pprint
 from .serializers import CurrencySerializer
 from rest_framework.response import Response
 from rest_framework import status,permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
+
 
 NBP_API_URL = "https://api.nbp.pl/api/exchangerates/tables/c/?format=json"
 
@@ -58,13 +59,47 @@ def currency_type(request,id):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class CurrencyClassView(APIView):
+class CurrenciesClassView(APIView):
     permission_classes = (permissions.AllowAny,)
 
     def get(self, request):
         currencies = Currency.objects.all()
         serializer = CurrencySerializer(currencies, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def post(self, request):
+        serializer = CurrencySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CurrencyClassView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def get_object(self, id):
+        try:
+            return Currency.objects.get(id=id)
+        except Currency.DoesNotExist:
+            raise Http404       
+        
+    def get(self, request,id ):
+        currency = self.get_object(id)
+        serializer = CurrencySerializer(currency)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def put(self, request, id):
+        currency = self.get_object(id)
+        serializer = CurrencySerializer(currency, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, id):
+        currency = self.get_object(id)
+        currency.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 
