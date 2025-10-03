@@ -1,14 +1,20 @@
 import requests
-from django.shortcuts import render
-from currency_api.models import Currency,Country
-from django.http import HttpResponse,JsonResponse,Http404
 from pprint import pprint
+
+from .models import Currency,Country
+from .pagination import CustomPagination
+from .filters import CurrencyFilter
 from .serializers import CurrencySerializer,CountrySerializer
+
+from django.db.models import Exists, OuterRef
+from django.http import HttpResponse,JsonResponse,Http404
+from django.shortcuts import render
+
 from rest_framework.response import Response
 from rest_framework import status,permissions,mixins,generics,viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
-
+from rest_framework.filters import SearchFilter,OrderingFilter
 
 NBP_API_URL = "https://api.nbp.pl/api/exchangerates/tables/c/?format=json"
 
@@ -57,6 +63,35 @@ def currency_type(request,id):
     elif request.method == 'DELETE':
         currency.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CurrenciesViewSet (viewsets.ModelViewSet):
+    queryset = Currency.objects.all()
+    serializer_class = CurrencySerializer
+    permission_classes = (permissions.AllowAny,)
+    pagination_class = CustomPagination
+    filterset_class = CurrencyFilter
+
+
+class CountryViewSet (viewsets.ModelViewSet):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
+    permission_classes = (permissions.AllowAny,)
+    pagination_class = CustomPagination
+    filter_backends = [SearchFilter,OrderingFilter]
+    search_fields = ["name"]
+    ordering_fields = ["id","name"]
+    #filterset_fields = ['name']
+    
+def test_countries(request):
+    return render(request, 'countries.html', {'countries': Country.objects.all()})
+
+def test_currencies(request):
+    return render(request, 'currencies.html', {'currencies': Currency.objects.all()})
+
+
+
+
 
 
 """
@@ -183,19 +218,15 @@ class CurrenciesViewSet (viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 """
 
-class CurrenciesViewSet (viewsets.ModelViewSet):
-    queryset = Currency.objects.all()
-    serializer_class = CurrencySerializer
-    permission_classes = (permissions.AllowAny,)
 
 
-class CountryViewSet (viewsets.ModelViewSet):
-    queryset = Country.objects.all()
-    serializer_class = CountrySerializer
-    permission_classes = (permissions.AllowAny,)
 
-def test(request):
-    return render(request, 'countries.html', {'countries': Country.objects.all()})
+
+
+
+
+
+
 
 def nbp_api(request):
     """

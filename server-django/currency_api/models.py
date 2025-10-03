@@ -28,27 +28,7 @@ class Currency(models.Model):
     name = models.CharField(max_length=100, blank=False, unique=True)
     code = models.CharField(max_length=4, blank=False, unique=True)
     table = models.CharField(max_length=1, blank=False, default="A")
-    countries = models.ManyToManyField(Country)
+    countries = models.ManyToManyField(Country,related_name="currencies")
     def __self__(self):
         return f"{self.name} [{self.code}]"
-    
 
-"""
-                "id": 1,
-            "name": "Lithuania",
-            "official_name": "Republic of Lithuania",
-            "flag": "https://flagcdn.com/lt.svg",
-            "region": "Europe",
-            "ccn3": "440"
-
-
-                    {
-            "currency": "bat (Tajlandia)",
-            "code": "THB",
-            "table": "B",
-            "countries": [
-                206
-            ]
-        },
-
-"""

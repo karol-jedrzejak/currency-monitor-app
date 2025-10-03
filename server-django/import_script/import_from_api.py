@@ -7,8 +7,8 @@ COUNTRIES_API = "https://restcountries.com/v3.1/all?fields=name,flags,region,cca
 
 COUNTRIES_CURRENCY_RELATION_API = "https://restcountries.com/v3.1/currency/"
 
-ADD_COUNTRY_API_URL = "http://127.0.0.1:8000/api/v1/countries/"
-ADD_CURRENCY_API_URL = "http://127.0.0.1:8000/api/v1/currencies/"
+ADD_COUNTRY_API_URL = "http://127.0.0.1:8000/api/v1/countries_vs/"
+ADD_CURRENCY_API_URL = "http://127.0.0.1:8000/api/v1/currencies_vs/"
 
 blad = None
 dane_kursow_a = {}
@@ -143,6 +143,7 @@ else:
 
     print("--------------------------------------------")   
     iteracja = 1
+    leng_1 = len(dane_kursow_a.get('rates', []))
     dane_kursow = dane_kursow_a.get('rates', [])+dane_kursow_b.get('rates', [])
     for rate in dane_kursow: 
         currency_code = rate.get('code', '')
@@ -168,13 +169,24 @@ else:
                         found_countries.append(country.get('id', {}))
                         break
 
+        if iteracja <= leng_1:
+            table = "A"
+        else:
+            table = "B"
+
         currency_info = {
             'name': rate.get('currency', ''),
             'code': currency_code,
-            'table': 'B',
+            'table': table,
             'countries': found_countries
         }
         send_data(currency_info,ADD_CURRENCY_API_URL)
-        print(f'[{iteracja}/{len(dane_kursow)}] Dodałem walutę {currency_code}.')
+        print(f'[{iteracja}/{len(dane_kursow)}] Dodałem walutę {currency_code}. Wsytępuje w krajach o ID: [',end="")
+        for fc in found_countries[:-1]:
+            print(fc,end=",")
+        print(found_countries[-1]+"]")
         iteracja+=1
         waluty.append(currency_info)
+
+
+
