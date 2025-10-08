@@ -23,8 +23,10 @@ const Test = (props) => {
     }
 
     useEffect(()=>{
+        /* Przy mount componentu */
         console.log("wywolano use effect")
 
+        /* Przy unmount componentu */
         return ()=>{
             console.log("the cleanup function was called")
         }
