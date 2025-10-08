@@ -1,5 +1,5 @@
 import React from "react";
-import ContextB from "./ContextB";
+import ContextB from "../learn/ContextB";
 
 const ContextA = () => {
 
