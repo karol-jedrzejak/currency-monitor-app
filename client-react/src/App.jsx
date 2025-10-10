@@ -5,29 +5,24 @@ import Header from "./components/Header"
 import Main from "./components/Main";
 import Footer from "./components/Footer";
 
-const ThemeContext = createContext()
+const AppStateContext = createContext()
 
  function App() {
 
- const [darkTheme, setDarkTheme] = useState(() => {
+  const [darkTheme, setDarkTheme] = useState(() => {
     if (localStorage.darkTheme !== null) {
-      console.log("jest darkTheme")
       if (localStorage.darkTheme=="true")
       {
         document.documentElement.classList.add("dark");
-        console.log("jest darkTheme true")
         return true;
       } else{
-        console.log("jest darkTheme false")
         return false;
       }
     } else{
-      console.log("nie ma darkTheme i jest set na false")
       localStorage.darkTheme=false;
       return false;
     }
   });
-
   const changeTheme = () => {
     if (darkTheme===true) {
       setDarkTheme(false);
@@ -39,16 +34,33 @@ const ThemeContext = createContext()
     document.documentElement.classList.toggle("dark")
   }
 
+  const [menu, setMenu] = useState({
+    name: "Top",
+    active: true,
+    link: "#Top"
+  },
+  {
+    name: "Waluty",
+    active: false,
+    link: "#Waluty"
+  },
+  {
+    name: "Moje Waluty",
+    active: false,
+    link: "#MojeWaluty"
+  });
+
+
   return (
     <>
-      <ThemeContext value={{darkTheme,changeTheme}}>
+      <AppStateContext value={{darkTheme,changeTheme,menu,setMenu}}>
         <Header/>
         <Main/>
-        <Footer/> 
-      </ThemeContext>
+        <Footer/>
+      </AppStateContext>
     </>
   )
 }
 
 export default App
-export {ThemeContext}
+export {AppStateContext}

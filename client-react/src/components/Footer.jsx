@@ -3,9 +3,23 @@ import React from "react"
 const Footer = () => {
   return (
     <>
-      <div className="p-4 m-4 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
-          Footer
-      </div>
+      <footer className="w-full bg-gray-50 dark:bg-gray-950 text-gray-950 dark:text-gray-50 pb-4">
+          <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+            <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">Created by Karol Jędrzejak | 2025
+          </span>
+          <ul className="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
+              <li>
+                  <a href="#" className="hover:underline me-4 md:me-6">Top</a>
+              </li>
+              <li>
+                  <a href="#" className="hover:underline me-4 md:me-6">Waluty</a>
+              </li>
+              <li>
+                  <a href="#" className="hover:underline me-4 md:me-6">Kontakt</a>
+              </li>
+          </ul>
+          </div>
+      </footer>
     </>
   )
 }

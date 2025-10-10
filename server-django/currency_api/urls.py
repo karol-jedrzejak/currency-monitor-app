@@ -1,5 +1,6 @@
 from django.urls import path,include
 from . import views
+from accounts import views as UserViews
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
@@ -8,11 +9,14 @@ router.register('countries_vs', views.CountryViewSet, basename='countries')
 
 urlpatterns = [
 
+    path("register/", UserViews.UserRegister.as_view(), name="account-create"),
+
     path("countries_html", views.test_countries, name="test_countries"),
     path("currencies_html", views.test_currencies, name="test_currencies"),
 
     path('', include(router.urls)),  # Include the router URLs
 ]
+
 """
     path("types_cv/", views.CurrenciesClassView.as_view(), name="type_cv"),
     path("types_cv/<int:id>/", views.CurrencyClassView.as_view(), name="type_cv"),

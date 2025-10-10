@@ -20,7 +20,7 @@ from django.urls import path,include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('api-auth/', include('rest_framework.urls')),  # Add this line to include the login URLs
+    #path('api-auth/', include('rest_framework.urls')),  # Add this line to include the login URLs
     path("api/v1/", include('currency_api.urls')),  # Map the /test/ URL to the test_response view
 ]
 
