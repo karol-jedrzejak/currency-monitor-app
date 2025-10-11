@@ -2,7 +2,13 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 
 class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True,style={'input_type': 'password'},min_length=8)
+    password = serializers.CharField(
+        write_only=True,
+        style={'input_type': 'password'},
+        min_length=8,
+        error_messages={
+            'min_length': 'Hasło jest za krótkie. Musi mieć minimum 8 znaków.'
+            })
     class Meta:
         model = User
         fields = ['username', 'email','password']

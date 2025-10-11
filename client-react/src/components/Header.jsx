@@ -1,9 +1,12 @@
 import { useState,useContext } from "react";
 import { Sun, Moon, Menu, X , BadgeCent } from "lucide-react";
 import { AppStateContext } from "../App";
+import { AuthContext } from "../AuthProvider";
+import { Link } from "react-router-dom"
 
 const Header = () => {
   const appState = useContext(AppStateContext);
+  const authData = useContext(AuthContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const menu = ["Top","Waluty","Kontakt"]
 
@@ -18,8 +21,11 @@ const Header = () => {
 
         {/* Desktop menu */}
         <div className="hidden md:flex items-center space-x-6">
-            {menu.map((name)=>(
-                <a key={name} href={"#"+name} className="
+
+            {authData.user ? ( 
+              <> 
+              {menu.map((name)=>(
+                <a key={name} href={"/"+name} className="
                 text-sm font-medium
                 px-3 py-2
                 rounded-xl
@@ -27,8 +33,40 @@ const Header = () => {
                 hover:text-gray-900 hover:bg-emerald-300 hover:shadow-md
                 dark:text-gray-300 
                 dark:hover:text-gray-900 dark:hover:bg-emerald-500 dark:hover:shadow-md dark:shadow-emerald-900">{name}</a>
-            ))}
-
+                ))}
+                <button className="
+                    cursor-pointer
+                    text-sm font-medium
+                    px-3 py-2
+                    rounded-xl
+                    text-gray-700 
+                    hover:text-gray-900 hover:bg-emerald-300 hover:shadow-md
+                    dark:text-gray-300 
+                    dark:hover:text-gray-900 dark:hover:bg-emerald-500 dark:hover:shadow-md dark:shadow-emerald-900
+                " onClick={() => authData.logout()}>Logout</button>
+              </>
+            ) : (
+              <>
+                <Link to="/register" className="
+                    text-sm font-medium
+                    px-3 py-2
+                    rounded-xl
+                    text-gray-700 
+                    hover:text-gray-900 hover:bg-emerald-300 hover:shadow-md
+                    dark:text-gray-300 
+                    dark:hover:text-gray-900 dark:hover:bg-emerald-500 dark:hover:shadow-md dark:shadow-emerald-900
+                ">Rejestracja</Link>
+                <Link to="/login" className="
+                    text-sm font-medium
+                    px-3 py-2
+                    rounded-xl
+                    text-gray-700 
+                    hover:text-gray-900 hover:bg-emerald-300 hover:shadow-md
+                    dark:text-gray-300 
+                    dark:hover:text-gray-900 dark:hover:bg-emerald-500 dark:hover:shadow-md dark:shadow-emerald-900
+                ">Login</Link>
+              </>
+            )}
           {/* Theme switch */}
           <div className="inline-flex items-stretch p-2 rounded-xl">
             <button onClick={() => appState.changeTheme()} className="
@@ -67,6 +105,7 @@ const Header = () => {
           <a href="#home" onClick={() => setMenuOpen(false)} className="hover:text-primary dark:hover:text-accent">Strona główna</a>
           <a href="#kursy" onClick={() => setMenuOpen(false)} className="hover:text-primary dark:hover:text-accent">Kursy walut</a>
           <a href="#kontakt" onClick={() => setMenuOpen(false)} className="hover:text-primary dark:hover:text-accent">Kontakt</a>
+          <Link to="/register" onClick={() => setMenuOpen(false)} className="hover:text-primary dark:hover:text-accent">Rejestracja</Link>
         </div>
       )}
     </nav>

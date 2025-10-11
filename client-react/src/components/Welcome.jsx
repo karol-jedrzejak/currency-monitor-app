@@ -1,8 +1,9 @@
 import React from "react"
 
-const Main = () => {
+const Welcome = () => {
   return (
     <>
+        <div className="text-red-500 text-8xl">Welcome Page</div>
       <div className="p-4 m-4 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
           Main
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tenetur, ipsum ad
@@ -169,4 +170,4 @@ const Main = () => {
   )
 }
 
-export default Main
+export default Welcome

@@ -1,9 +1,15 @@
 
 import { createContext,useState } from "react"
 
+import { BrowserRouter as Router, Route, Routes, BrowserRouter } from "react-router-dom";
+
 import Header from "./components/Header"
-import Main from "./components/Main";
+import Welcome from "./components/Welcome";
 import Footer from "./components/Footer";
+
+import Register from "./components/Register";
+import Login from "./components/Login";
+import AuthProvider from "./AuthProvider";
 
 const AppStateContext = createContext()
 
@@ -53,11 +59,19 @@ const AppStateContext = createContext()
 
   return (
     <>
-      <AppStateContext value={{darkTheme,changeTheme,menu,setMenu}}>
-        <Header/>
-        <Main/>
-        <Footer/>
-      </AppStateContext>
+      <BrowserRouter>
+        <AuthProvider>
+          <AppStateContext value={{darkTheme,changeTheme,menu,setMenu}}>
+            <Header/>
+            <Routes>
+              <Route path="/" element={<Welcome/>} />
+              <Route path="/register" element={<Register/>} />
+              <Route path="/login" element={<Login/>} />
+            </Routes>
+            <Footer/>
+          </AppStateContext>
+        </AuthProvider>
+      </BrowserRouter>
     </>
   )
 }
