@@ -21,7 +21,17 @@ const Header = () => {
 
         {/* Desktop menu */}
         <div className="hidden md:flex items-center space-x-6">
-
+            <>
+              <Link to="/allCurrencies" className="
+                    text-sm font-medium
+                    px-3 py-2
+                    rounded-xl
+                    text-gray-700 
+                    hover:text-gray-900 hover:bg-emerald-300 hover:shadow-md
+                    dark:text-gray-300 
+                    dark:hover:text-gray-900 dark:hover:bg-emerald-500 dark:hover:shadow-md dark:shadow-emerald-900
+                ">All</Link>
+            </>
             {authData.user ? ( 
               <> 
               {menu.map((name)=>(

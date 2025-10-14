@@ -20,7 +20,7 @@ const AuthProvider = ({ children }) => {
             setUser({
                 token: access_token,
                 refresh_token: refresh_token
-            }); // Replace with real user data
+            });
         }
         setLoading(false);
     }, []);
@@ -29,7 +29,7 @@ const AuthProvider = ({ children }) => {
     const login = (data) => {
         setUser({
                 token:  data.access,
-                refresh_token: data.refresh
+                refresh_token: data.refresh,
             })
         localStorage.setItem('access_token', data.access);
         localStorage.setItem('refresh_token', data.refresh);

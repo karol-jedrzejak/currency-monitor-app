@@ -15,6 +15,7 @@ from rest_framework import status,permissions,mixins,generics,viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 from rest_framework.filters import SearchFilter,OrderingFilter
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 NBP_API_URL = "https://api.nbp.pl/api/exchangerates/tables/c/?format=json"
 
@@ -68,7 +69,8 @@ def currency_type(request,id):
 class CurrenciesViewSet (viewsets.ModelViewSet):
     queryset = Currency.objects.all()
     serializer_class = CurrencySerializer
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (IsAuthenticated,)
+    #permission_classes = (AllowAny,)
     pagination_class = CustomPagination
     filterset_class = CurrencyFilter
 
@@ -76,7 +78,7 @@ class CurrenciesViewSet (viewsets.ModelViewSet):
 class CountryViewSet (viewsets.ModelViewSet):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (AllowAny,)
     pagination_class = CustomPagination
     filter_backends = [SearchFilter,OrderingFilter]
     search_fields = ["name"]

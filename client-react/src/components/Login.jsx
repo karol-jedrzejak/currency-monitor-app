@@ -30,9 +30,6 @@ const Login = () => {
         try {
             setLoading(true);
             const response = await axios.post('http://127.0.0.1:8000/api/v1/token/', form);
-            //localStorage.setItem('access_token', response.data.access);
-            //localStorage.setItem('refresh_token', response.data.refresh);
-            //axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access}`;
             setLoading(false);
             authData.login(response.data);
         } catch (error) {

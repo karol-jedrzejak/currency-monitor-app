@@ -10,6 +10,7 @@ import Footer from "./components/Footer";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import AuthProvider from "./AuthProvider";
+import AllCurrencies from "./components/AllCurrencies";
 
 const AppStateContext = createContext()
 
@@ -67,6 +68,7 @@ const AppStateContext = createContext()
               <Route path="/" element={<Welcome/>} />
               <Route path="/register" element={<Register/>} />
               <Route path="/login" element={<Login/>} />
+              <Route path="/allCurrencies" element={<AllCurrencies/>} />
             </Routes>
             <Footer/>
           </AppStateContext>
