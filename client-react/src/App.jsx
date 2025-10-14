@@ -11,6 +11,8 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import AuthProvider from "./AuthProvider";
 import AllCurrencies from "./components/AllCurrencies";
+import PrivateRoute from "./routesTypes/privateRoute";
+import PublicRoute from "./routesTypes/publicRoute";
 
 const AppStateContext = createContext()
 
@@ -66,9 +68,9 @@ const AppStateContext = createContext()
             <Header/>
             <Routes>
               <Route path="/" element={<Welcome/>} />
-              <Route path="/register" element={<Register/>} />
-              <Route path="/login" element={<Login/>} />
-              <Route path="/allCurrencies" element={<AllCurrencies/>} />
+              <Route path="/register" element={<PublicRoute><Register/></PublicRoute>} />
+              <Route path="/login" element={<PublicRoute><Login/></PublicRoute>} />
+              <Route path="/allCurrencies" element={<PrivateRoute><AllCurrencies/></PrivateRoute>} />
             </Routes>
             <Footer/>
           </AppStateContext>

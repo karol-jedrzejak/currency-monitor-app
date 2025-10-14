@@ -1,22 +1,34 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
+import axios from 'axios';  
+import { Loader } from "lucide-react";
+import axiosInstance from '../axiosInstance';
 
 const AllCurrencies = () => {
     const [currencies, setCurrencies] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('http://127.0.0.1:8000/api/v1/currencies_vs/')
-            .then(res => res.json())
-            .then(data => {
-                setCurrencies(data);
+        const fetchData = async () => {
+            try {
+                const response = await axiosInstance.get('/currencies_vs/',{
+/*                     headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                    } */
+                })
+                setCurrencies(response.data);
                 setLoading(false);
-            })
-            .catch(() => setLoading(false));
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+        fetchData();
     }, []);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div className="flex-grow flex justify-center items-center text-emerald-800 dark:text-emerald-300">
+                <Loader size={24}/><div  className="p-2">Ładowanie... </div>
+            </div>;
     }
 
     return (
