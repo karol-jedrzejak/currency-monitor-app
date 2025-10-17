@@ -128,7 +128,7 @@ else:
             'ccn3': ccn3,
         }
 
-        send_data(country_info,ADD_COUNTRY_API_URL)
+        #send_data(country_info,ADD_COUNTRY_API_URL)
         print(f'[{id}/{len(dane_countries)}] Dodałem kraj {name}.')
         country_info = {
             'id': id,
@@ -180,11 +180,12 @@ else:
             'table': table,
             'countries': found_countries
         }
-        send_data(currency_info,ADD_CURRENCY_API_URL)
+        #send_data(currency_info,ADD_CURRENCY_API_URL)
         print(f'[{iteracja}/{len(dane_kursow)}] Dodałem walutę {currency_code}. Wsytępuje w krajach o ID: [',end="")
         for fc in found_countries[:-1]:
             print(fc,end=",")
-        print(found_countries[-1]+"]")
+        print(found_countries[-1],end='')
+        print("]")
         iteracja+=1
         waluty.append(currency_info)
 
