@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Input from './Input';
-import Button from './Button';
+import Input from '../components/Input';
+import Button from '../components/Button';
 import axios from 'axios';
 import { Loader } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
@@ -31,7 +31,7 @@ const Login = () => {
             setLoading(true);
             const response = await axios.post('http://127.0.0.1:8000/api/v1/token/', form);
             setLoading(false);
-            authData.login(response.data);
+            authData.login(response.data,form.username);
         } catch (error) {
             setLoading(false);
             setError("Błędny login lub hasło");

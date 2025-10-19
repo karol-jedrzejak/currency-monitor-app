@@ -1,6 +1,6 @@
 import { useState,useContext } from "react";
 import { Sun, Moon, Menu, X , BadgeCent } from "lucide-react";
-import { AppStateContext } from "../App";
+import { AppStateContext } from "../AppStateProvider";
 import { AuthContext } from "../AuthProvider";
 import { Link } from "react-router-dom"
 

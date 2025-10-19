@@ -69,8 +69,8 @@ def currency_type(request,id):
 class CurrenciesViewSet (viewsets.ModelViewSet):
     queryset = Currency.objects.all()
     serializer_class = CurrencySerializer
-    permission_classes = (IsAuthenticated,)
-    #permission_classes = (AllowAny,)
+    #permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     pagination_class = CustomPagination
     filterset_class = CurrencyFilter
 

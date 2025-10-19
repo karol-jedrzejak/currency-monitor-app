@@ -11,11 +11,7 @@ const AllCurrencies = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axiosInstance.get('/currencies_vs/',{
-/*                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-                    } */
-                })
+                const response = await axiosInstance.get('/currencies_vs/')
                 setCurrencies(response.data);
                 setLoading(false);
             } catch (error) {

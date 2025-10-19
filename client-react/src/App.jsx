@@ -1,79 +1,25 @@
 
-import { createContext,useState } from "react"
-
 import { BrowserRouter as Router, Route, Routes, BrowserRouter } from "react-router-dom";
 
 import Header from "./components/Header"
-import Welcome from "./components/Welcome";
 import Footer from "./components/Footer";
+import Main2 from "./components/Main2";
 
-import Register from "./components/Register";
-import Login from "./components/Login";
 import AuthProvider from "./AuthProvider";
-import AllCurrencies from "./components/AllCurrencies";
-import PrivateRoute from "./routesTypes/privateRoute";
-import PublicRoute from "./routesTypes/publicRoute";
+import AppStateProvider from "./AppStateProvider";
 
-const AppStateContext = createContext()
 
- function App() {
-
-  const [darkTheme, setDarkTheme] = useState(() => {
-    if (localStorage.darkTheme !== null) {
-      if (localStorage.darkTheme=="true")
-      {
-        document.documentElement.classList.add("dark");
-        return true;
-      } else{
-        return false;
-      }
-    } else{
-      localStorage.darkTheme=false;
-      return false;
-    }
-  });
-  const changeTheme = () => {
-    if (darkTheme===true) {
-      setDarkTheme(false);
-      localStorage.darkTheme = false;
-    } else{
-      setDarkTheme(true);
-      localStorage.darkTheme = true;
-    }
-    document.documentElement.classList.toggle("dark")
-  }
-
-  const [menu, setMenu] = useState({
-    name: "Top",
-    active: true,
-    link: "#Top"
-  },
-  {
-    name: "Waluty",
-    active: false,
-    link: "#Waluty"
-  },
-  {
-    name: "Moje Waluty",
-    active: false,
-    link: "#MojeWaluty"
-  });
-
+function App() {
 
   return (
     <>
       <BrowserRouter>
         <AuthProvider>
-          <AppStateContext value={{darkTheme,changeTheme,menu,setMenu}}>
+          <AppStateProvider>
             <Header/>
-            <Routes>
-              <Route path="/" element={<Welcome/>} />
-              <Route path="/register" element={<PublicRoute><Register/></PublicRoute>} />
-              <Route path="/login" element={<PublicRoute><Login/></PublicRoute>} />
-              <Route path="/allCurrencies" element={<PrivateRoute><AllCurrencies/></PrivateRoute>} />
-            </Routes>
+            <Main2/>
             <Footer/>
-          </AppStateContext>
+          </AppStateProvider>
         </AuthProvider>
       </BrowserRouter>
     </>
@@ -81,4 +27,3 @@ const AppStateContext = createContext()
 }
 
 export default App
-export {AppStateContext}
