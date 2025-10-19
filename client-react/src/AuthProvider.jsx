@@ -12,7 +12,6 @@ const AuthProvider = ({ children }) => {
 
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
 
         // Login function
         const login = (data,username) => {
@@ -77,7 +76,6 @@ const AuthProvider = ({ children }) => {
                 refresh_token: refresh_token,
                 user: localStorage.getItem('user'),       
             });
-            setLoading(false);
         } else if (!refreshExpired) {
             refreshTokens().then(() => {
                 setUser({
@@ -85,7 +83,6 @@ const AuthProvider = ({ children }) => {
                     refresh_token: localStorage.getItem('refresh_token'),
                     user: localStorage.getItem('user'),
                 });
-                setLoading(false);
             });
         } else {
             logout();
@@ -93,7 +90,7 @@ const AuthProvider = ({ children }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, loading, login, logout }}>
+        <AuthContext.Provider value={{ user, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

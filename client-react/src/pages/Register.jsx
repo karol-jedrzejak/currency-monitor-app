@@ -27,8 +27,6 @@ const Register = () => {
         try {
             setLoading(true);
             const response = await axios.post('http://127.0.0.1:8000/api/v1/register/', form);
-            //console.log(response.data);
-            //console.log("Rejestracja udana");
             setSuccess(true);
             setForm({
                 username: '',
@@ -38,7 +36,6 @@ const Register = () => {
             setErrors({});
         } catch (error) {
             setErrors(error.response.data);
-            //console.log("Błąd rejestracji:", error);
         } finally {
             setLoading(false);
         }

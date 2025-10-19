@@ -28,11 +28,11 @@ const AllCurrencies = () => {
     }
 
     return (
-        <div>
+        <div className="p-6 text-gray-900 dark:text-gray-100">
             <h2>All Currencies</h2>
             <ul>
                 {currencies.results.map((currency, idx) => (
-                    <li key={idx}>{currency.name} ({currency.code})</li>
+                    <li key={idx}>- {currency.name} ({currency.code})</li>
                 ))}
             </ul>
         </div>

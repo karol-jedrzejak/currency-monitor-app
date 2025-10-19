@@ -11,23 +11,23 @@ import AllCurrencies from "../pages/AllCurrencies";
 import ErrorPage from "../pages/ErrorPage";
 
 const Main2 = () => {
-  const isLoggedIn = useContext(AuthContext);
+  const authData = useContext(AuthContext);
 
     return (
         <>
-            {isLoggedIn.user ? (
-                <Routes>
-                    <Route path='*' element={<ErrorPage/>} />
-                    <Route path="/" element={<Welcome/>} />
-                    <Route path="/allCurrencies" element={<AllCurrencies/>} />
-                </Routes>
-              ):(
-                <Routes>
-                    <Route path='*' element={<ErrorPage/>} />
-                    <Route path="/register" element={<Register/>} />
-                    <Route path="/login" element={<Login/>} />
-                </Routes>
-              )}
+          {authData.user ? (
+            <Routes>
+                <Route path='*' element={<ErrorPage/>} />
+                <Route path="/" element={<Welcome/>} />
+                <Route path="/allCurrencies" element={<AllCurrencies/>} />
+            </Routes>
+          ):(
+            <Routes>
+                <Route path='*' element={<ErrorPage/>} />
+                <Route path="/register" element={<Register/>} />
+                <Route path="/login" element={<Login/>} />
+            </Routes>
+          )}
         </>
     );
 };
