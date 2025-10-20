@@ -23,7 +23,7 @@ const AuthProvider = ({ children }) => {
                     refresh_token: data.refresh,
                     user: username,
                 })
-            navigate('/');
+            navigate('/powitanie');
         };
 
         // Logout function

@@ -3,47 +3,39 @@ import { Sun, Moon, Menu, X , BadgeCent } from "lucide-react";
 import { AppStateContext } from "../AppStateProvider";
 import { AuthContext } from "../AuthProvider";
 import { Link } from "react-router-dom"
+import { useLocation } from 'react-router'
 
 const Header = () => {
   const appState = useContext(AppStateContext);
   const authData = useContext(AuthContext);
   const [menuOpen, setMenuOpen] = useState(false);
-  const menu = ["Top","Waluty","Kontakt"]
+  const location = useLocation();
+  const { hash, pathname, search } = location;
+
+  const activeClass = "text-sm font-medium px-3 py-2 rounded-xl text-gray-700 hover:text-gray-900 bg-emerald-200 hover:bg-emerald-300 hover:shadow-md dark:text-gray-300 dark:bg-emerald-800 dark:hover:text-gray-900 dark:hover:bg-emerald-500 dark:hover:shadow-md dark:shadow-emerald-900";
+  const notActiveClass = "text-sm font-medium px-3 py-2 rounded-xl text-gray-700 hover:text-gray-900 hover:bg-emerald-300 hover:shadow-md dark:text-gray-300 dark:hover:text-gray-900 dark:hover:bg-emerald-500 dark:hover:shadow-md dark:shadow-emerald-900";
+
 
   return (
-    <nav className="relative w-full border-b border-gray-900 dark:border-gray-100 z-50 shadow-md dark:shadow-gray-800">
+    <nav className="relative w-full border-b border-emerald-700 dark:border-emerald-300 z-50 shadow-md dark:shadow-gray-800">
       <div className="flex items-center justify-between px-6 py-3">
         {/* Logo */}
-        <div className="flex font-medium items-center space-x-2">
-          <BadgeCent className="text-emerald-800 dark:text-emerald-500" size={24} /> 
-          <span className="text-xl  text-slate-800 dark:text-slate-200">Currency Monitor APP</span>
-        </div>
-
+        <Link to="/powitanie">
+          <div className="flex font-medium items-center space-x-2">
+            <BadgeCent className="text-emerald-800 dark:text-emerald-500 drop-shadow-lg" size={24} /> 
+            <span className="text-xl  text-slate-800 dark:text-slate-200">Currency Monitor APP</span>
+          </div>
+        </Link>
+        
         {/* Desktop menu */}
-        <div className="hidden md:flex items-center space-x-6">
-            <>
-              <Link to="/allCurrencies" className="
-                    text-sm font-medium
-                    px-3 py-2
-                    rounded-xl
-                    text-gray-700 
-                    hover:text-gray-900 hover:bg-emerald-300 hover:shadow-md
-                    dark:text-gray-300 
-                    dark:hover:text-gray-900 dark:hover:bg-emerald-500 dark:hover:shadow-md dark:shadow-emerald-900
-                ">All</Link>
-            </>
+        <div className="hidden lg:flex items-center space-x-6">
             {authData.user ? ( 
               <> 
-              {menu.map((name)=>(
-                <a key={name} href={"/"+name} className="
-                text-sm font-medium
-                px-3 py-2
-                rounded-xl
-                text-gray-700 
-                hover:text-gray-900 hover:bg-emerald-300 hover:shadow-md
-                dark:text-gray-300 
-                dark:hover:text-gray-900 dark:hover:bg-emerald-500 dark:hover:shadow-md dark:shadow-emerald-900">{name}</a>
-                ))}
+                <Link to="/allCurrencies" className={(pathname=="/allCurrencies" ? activeClass : notActiveClass)}>Waluty</Link>
+                <Link to="/currency" className={(pathname=="/currency" ? activeClass : notActiveClass)}>Waluta</Link>
+                <Link to="/countries" className={(pathname=="/countries" ? activeClass : notActiveClass)}>Kraje</Link>
+                <Link to="/aiPrediction" className={(pathname=="/aiPrediction" ? activeClass : notActiveClass)}>Predykcja AI</Link>
+                <Link to="/myCurrencies" className={(pathname=="/myCurrencies" ? activeClass : notActiveClass)}>Moje Waluty</Link>
                 <button className="
                     cursor-pointer
                     text-sm font-medium
@@ -53,28 +45,12 @@ const Header = () => {
                     hover:text-gray-900 hover:bg-emerald-300 hover:shadow-md
                     dark:text-gray-300 
                     dark:hover:text-gray-900 dark:hover:bg-emerald-500 dark:hover:shadow-md dark:shadow-emerald-900
-                " onClick={() => authData.logout()}>Logout</button>
+                " onClick={() => authData.logout()}>Wyloguj</button>
               </>
             ) : (
               <>
-                <Link to="/register" className="
-                    text-sm font-medium
-                    px-3 py-2
-                    rounded-xl
-                    text-gray-700 
-                    hover:text-gray-900 hover:bg-emerald-300 hover:shadow-md
-                    dark:text-gray-300 
-                    dark:hover:text-gray-900 dark:hover:bg-emerald-500 dark:hover:shadow-md dark:shadow-emerald-900
-                ">Rejestracja</Link>
-                <Link to="/login" className="
-                    text-sm font-medium
-                    px-3 py-2
-                    rounded-xl
-                    text-gray-700 
-                    hover:text-gray-900 hover:bg-emerald-300 hover:shadow-md
-                    dark:text-gray-300 
-                    dark:hover:text-gray-900 dark:hover:bg-emerald-500 dark:hover:shadow-md dark:shadow-emerald-900
-                ">Login</Link>
+                <Link to="/register" className={(pathname=="/register" ? activeClass : notActiveClass)}>Rejestracja</Link>
+                <Link to="/login" className={(pathname=="/login" ? activeClass : notActiveClass)}>Zaloguj</Link>
               </>
             )}
           {/* Theme switch */}
@@ -91,7 +67,7 @@ const Header = () => {
         </div>
 
         {/* Mobile hamburger */}
-        <div className="flex space-x-4 md:hidden">
+        <div className="flex space-x-4 lg:hidden">
           <button onClick={() => appState.changeTheme()} className="rounded-full bg-primary text-gray-900 dark:bg-accent dark:text-gray-100 cursor-pointer">
                 {appState.darkTheme ? <Sun size={24}/> : <Moon size={24}/>}
               </button>
@@ -103,7 +79,7 @@ const Header = () => {
 
       {/* Mobile menu full screen */}
       {menuOpen && (
-        <div className="md:hidden fixed inset-0 bg-gray-50 dark:bg-gray-950 text-gray-950 dark:text-gray-50 flex flex-col items-center justify-center space-y-6 text-2xl">
+        <div className="lg:hidden fixed inset-0 bg-gray-50 dark:bg-gray-950 text-gray-950 dark:text-gray-50 flex flex-col items-center justify-center space-y-6 text-2xl">
           <div  className="absolute top-[14px] right-6 flex space-x-4">
             <button onClick={() => appState.changeTheme()} className="rounded-full bg-primary text-gray-900 dark:bg-accent dark:text-gray-100 cursor-pointer">
               {appState.darkTheme ? <Sun size={24}/> : <Moon size={24}/>}

@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes, BrowserRouter } from "react-rou
 
 import Header from "./components/Header"
 import Footer from "./components/Footer";
-import Main2 from "./components/Main2";
+import Main from "./components/Main";
 
 import AuthProvider from "./AuthProvider";
 import AppStateProvider from "./AppStateProvider";
@@ -17,7 +17,7 @@ function App() {
         <AuthProvider>
           <AppStateProvider>
             <Header/>
-            <Main2/>
+            <Main/>
             <Footer/>
           </AppStateProvider>
         </AuthProvider>
