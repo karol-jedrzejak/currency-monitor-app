@@ -10,7 +10,8 @@ const Button = ({ onClick, children, type = "button", disabled = false, classNam
                 px-3 py-2
                 rounded-xl
                 font-medium
-                text-gray-700 bg-emerald-200
+                border-1 border-emerald-500 dark:border-emerald-400
+                text-gray-700 bg-emerald-100
                 dark:text-gray-900 dark:bg-emerald-700
                 hover:bg-emerald-300
                 hover:shadow-md

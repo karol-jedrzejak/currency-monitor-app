@@ -12,18 +12,18 @@ const Header = () => {
   const location = useLocation();
   const { hash, pathname, search } = location;
 
-  const activeClass = "text-sm font-medium px-3 py-2 rounded-xl text-gray-700 hover:text-gray-900 bg-emerald-200 hover:bg-emerald-300 hover:shadow-md dark:text-gray-300 dark:bg-emerald-800 dark:hover:text-gray-900 dark:hover:bg-emerald-500 dark:hover:shadow-md dark:shadow-emerald-900";
+  const activeClass = "text-sm font-medium px-3 py-2 rounded-xl text-gray-700 hover:text-gray-900 bg-emerald-100 border-1 border-emerald-200 hover:border-emerald-300 hover:bg-emerald-300 hover:shadow-md dark:text-gray-300 dark:bg-gray-900 dark:hover:text-gray-900 dark:hover:bg-emerald-500 dark:hover:shadow-md dark:shadow-emerald-900";
   const notActiveClass = "text-sm font-medium px-3 py-2 rounded-xl text-gray-700 hover:text-gray-900 hover:bg-emerald-300 hover:shadow-md dark:text-gray-300 dark:hover:text-gray-900 dark:hover:bg-emerald-500 dark:hover:shadow-md dark:shadow-emerald-900";
 
-
   return (
-    <nav className="relative w-full border-b border-emerald-700 dark:border-emerald-300 z-50 shadow-md dark:shadow-gray-800">
+    <nav className="relative w-full z-50 shadow-md dark:shadow-gray-950 bg-white dark:bg-gray-800">
       <div className="flex items-center justify-between px-6 py-3">
         {/* Logo */}
         <Link to="/powitanie">
-          <div className="flex font-medium items-center space-x-2">
-            <BadgeCent className="text-emerald-800 dark:text-emerald-500 drop-shadow-lg" size={24} /> 
-            <span className="text-xl  text-slate-800 dark:text-slate-200">Currency Monitor APP</span>
+          <div className="flex font-medium items-center space-x-2"><span></span>
+            <BadgeCent className="text-emerald-500  drop-shadow-lg" size={24} /> 
+            <span className="text-xl text-slate-800 dark:text-slate-200 m-0">Currency</span><span className="text-xl text-emerald-500 dark:text-emerald-500">Monitor</span>
+            <span className="text-xl text-slate-800 dark:text-slate-200"> APP</span>
           </div>
         </Link>
         
@@ -79,7 +79,7 @@ const Header = () => {
 
       {/* Mobile menu full screen */}
       {menuOpen && (
-        <div className="lg:hidden fixed inset-0 bg-gray-50 dark:bg-gray-950 text-gray-950 dark:text-gray-50 flex flex-col items-center justify-center space-y-6 text-2xl">
+        <div className="lg:hidden fixed inset-0 bg-gray-50 dark:bg-gray-800 text-gray-950 dark:text-gray-50 flex flex-col items-center justify-center space-y-6 text-2xl">
           <div  className="absolute top-[14px] right-6 flex space-x-4">
             <button onClick={() => appState.changeTheme()} className="rounded-full bg-primary text-gray-900 dark:bg-accent dark:text-gray-100 cursor-pointer">
               {appState.darkTheme ? <Sun size={24}/> : <Moon size={24}/>}
@@ -88,10 +88,24 @@ const Header = () => {
               {menuOpen ? <X size={24}/> : <Menu size={24}/>}
             </button>
           </div>
-          <a href="#home" onClick={() => setMenuOpen(false)} className="hover:text-primary dark:hover:text-accent">Strona główna</a>
-          <a href="#kursy" onClick={() => setMenuOpen(false)} className="hover:text-primary dark:hover:text-accent">Kursy walut</a>
-          <a href="#kontakt" onClick={() => setMenuOpen(false)} className="hover:text-primary dark:hover:text-accent">Kontakt</a>
-          <Link to="/register" onClick={() => setMenuOpen(false)} className="hover:text-primary dark:hover:text-accent">Rejestracja</Link>
+          {authData.user ? ( 
+            <>
+              <Link to="/allCurrencies" onClick={() => setMenuOpen(false)} className="">Waluty</Link>
+              <Link to="/currency" onClick={() => setMenuOpen(false)} className="">Waluta</Link>
+              <Link to="/countries" onClick={() => setMenuOpen(false)} className="">Kraje</Link>
+              <Link to="/aiPrediction" onClick={() => setMenuOpen(false)} className="">Predykcja AI</Link>
+              <Link to="/myCurrencies" onClick={() => setMenuOpen(false)} className="">Moje Waluty</Link>
+              <button className="cursor-pointer" onClick={() => {
+                setMenuOpen(false);
+                authData.logout();
+              }}>Wyloguj</button>
+            </>
+          ) : (
+            <> 
+              <Link to="/login" onClick={() => setMenuOpen(false)} className="">Zaloguj</Link>
+              <Link to="/register" onClick={() => setMenuOpen(false)} className="">Rejestracja</Link>
+            </>
+            )}
         </div>
       )}
     </nav>

@@ -1,9 +1,16 @@
 import React from "react"
 
+import TopCenter from '../layout/TopCenter';
+import Frame from '../components/Frame';
+
 const Countries = () => {
   return (
     <>
-        <div className="p-6 text-gray-900 dark:text-gray-100">Kraje</div>
+      <TopCenter>
+        <Frame>
+            Kraje
+        </Frame>
+      </TopCenter>
     </>
   )
 }

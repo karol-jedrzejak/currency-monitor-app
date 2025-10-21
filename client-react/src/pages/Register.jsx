@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
+
+import CenterCenter from '../layout/CenterCenter';
+import Frame from '../components/Frame';
 import Input from '../components/Input';
 import Button from '../components/Button';
+
 import axios from 'axios';
 import { Loader } from "lucide-react";
 
@@ -42,9 +46,10 @@ const Register = () => {
     };
 
     return (
-        <div className="flex-grow flex justify-center items-center">
-            <form onSubmit={handleSubmit} className='p-6 w-sm border border-emerald-500 shadow-md rounded-2xl'>
-                <h2 className='text-center p-6 text-gray-900 dark:text-gray-100 text-3xl'>REJESTRACJA</h2>
+        <CenterCenter>
+            <Frame>
+            <form onSubmit={handleSubmit} >
+                <h2 className='text-center p-6 text-3xl'>REJESTRACJA</h2>
                 <Input
                     label="Login:"   
                     type = "text"
@@ -84,7 +89,8 @@ const Register = () => {
                     )}
                 
             </form>
-        </div>
+            </Frame>
+        </CenterCenter>
     );
 };
 

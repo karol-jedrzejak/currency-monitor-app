@@ -1,9 +1,16 @@
 import React from "react"
 
+import TopCenter from '../layout/TopCenter';
+import Frame from '../components/Frame';
+
 const Currency = () => {
   return (
     <>
-        <div className="p-6 text-gray-900 dark:text-gray-100">Konkretna waluta</div>
+      <TopCenter>
+        <Frame>
+            Waluta
+        </Frame>
+      </TopCenter>
     </>
   )
 }
