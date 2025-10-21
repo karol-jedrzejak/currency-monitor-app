@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ChevronRight,ChevronLeft,ChevronLast,ChevronFirst } from "lucide-react";
 
-const Pagination = ({prev,next,prevNext,pages,current,fetch}) => {
+const Pagination = ({pages,current,fetch}) => {
     
 
 
@@ -11,11 +11,11 @@ const Pagination = ({prev,next,prevNext,pages,current,fetch}) => {
     const dots = "rounded-md text-gray-900 dark:text-gray-400 dark:shadow-emerald-900 w-[26px] h-[26px] flex justify-center items-center opacity-50";
     
     return (
-        <div className="flex items-center space-x-2 w-full justify-center mt-2">
-            <button onClick={prev ? () => fetch({page_num: 1}): null} className={(prev ? normal : disabled)}>
+        <div className="flex items-center space-x-2 w-full justify-center mt-4">
+            <button onClick={current > 1 ? () => fetch({page_num: 1}): null} className={(current > 1 ? normal : disabled)}>
                 <ChevronFirst size={24} /> 
             </button>
-            <button onClick={prev ? () => prevNext(prev) : null} className={(prev ? normal : disabled)}>
+            <button onClick={current >1  ? () => fetch({page_num: current-1}) : null} className={(current > 1 ? normal : disabled)}>
                 <ChevronLeft size={24} /> 
             </button>
         {current-3 >= 1 && (
@@ -63,10 +63,10 @@ const Pagination = ({prev,next,prevNext,pages,current,fetch}) => {
             </div>
             </>
         )}
-            <button onClick={next ? () => prevNext(next) : null} className={(next ? normal : disabled)}>
+            <button onClick={current < pages ? () => fetch({page_num: current+1}) : null} className={(current < pages ? normal : disabled)}>
                 <ChevronRight size={24} />
             </button>
-            <button onClick={next ? () => fetch({page_num: pages}) : null} className={(next ? normal : disabled)}>
+            <button onClick={current < pages ? () => fetch({page_num: pages}) : null} className={(current < pages ? normal : disabled)}>
                 <ChevronLast size={24} />
             </button>
         </div>
