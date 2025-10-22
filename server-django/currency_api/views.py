@@ -67,7 +67,7 @@ def currency_type(request,id):
 
 
 class CurrenciesViewSet (viewsets.ModelViewSet):
-    queryset = Currency.objects.all().order_by('name')
+    queryset = Currency.objects.all()
     serializer_class = CurrencySerializer
     #permission_classes = (IsAuthenticated,)
     permission_classes = (AllowAny,)

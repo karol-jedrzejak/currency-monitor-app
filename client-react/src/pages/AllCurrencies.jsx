@@ -65,27 +65,22 @@ const AllCurrencies = () => {
         setSearch(e.target.value);
     };
 
+    const handleEnter = (e) => {
+        if (e.key === 'Enter') {
+            fetch({name: search, page_num: 1});
+        }
+    };
+
     useEffect(() => {
         fetch(params);
     }, []);
 
-
-/*     if (loading) {
-        return  <CenterCenter>
-                    <Frame>
-                        <div className="text-emerald-500 flex flex-row justify-center items-center">
-                            <Loader size={24}/><div  className="p-2">Ładowanie... </div>
-                        </div>
-                    </Frame>
-                </CenterCenter>;
-    } */
-
     return (
         <TopCenter>
             <Frame>
-                <div className='flex flex-row items-center justify-between mb-4'>
-                    <h2 className='text-center text-emerald-800 dark:text-emerald-300 text-lg font-bold mr-4'>WSZYSTKIE WALUTY</h2>
-                    <div className='flex flex-row items-center'>
+                <div className='flex flex-col sm:flex-row items-center justify-between mb-4'>
+                    <h2 className='text-center text-emerald-800 dark:text-emerald-300 text-lg font-bold mx-4'>WSZYSTKIE WALUTY</h2>
+                    <div className='flex flex-col sm:flex-row items-center'>
                         <Input
                             label="Wyszukaj:"   
                             type = "text"
@@ -94,12 +89,23 @@ const AllCurrencies = () => {
                             onChange={handleSearch}
                             placeholder = ""   
                             className = ""
+                            onKeyDown={handleEnter}
                         ></Input>
-                        <Search className="rounded-md border-1 border-black p-2 w-[40px] h-[40px] bg-emerald-500 cursor-pointer" size={24} onClick={() => fetch({name: search, page_num: 1})}/>
-                        <X className="ms-2 rounded-md border-1 border-black p-2 w-[40px] h-[40px] bg-emerald-500 cursor-pointer" size={24} onClick={() => {
+                        <div className='flex flex-row items-center'>
+                        <Search className="
+                        rounded-md border-1 border-gray-500 p-2 w-[40px] h-[40px]
+                        bg-emerald-100 hover:bg-emerald-400 hover:shadow-md
+                        dark:bg-gray-800 dark:hover:bg-emerald-600 dark:hover:text-gray-900 dark:hover:shadow-md dark:shadow-emerald-900 dark:hover:border-emerald-500
+                        cursor-pointer" size={24} onClick={() => fetch({name: search, page_num: 1})}/>
+                        <X className="
+                        ms-2 rounded-md border-1 border-gray-500 p-2 w-[40px] h-[40px]
+                        bg-emerald-100 hover:bg-emerald-400 hover:shadow-md
+                        dark:bg-gray-800 dark:hover:bg-emerald-600 dark:hover:text-gray-900 dark:hover:shadow-md dark:shadow-emerald-900 dark:hover:border-emerald-500
+                        cursor-pointer" size={24} onClick={() => {
                                 setSearch('');
                                 fetch({name: ''});
                             }}/>
+                        </div>
                     </div>
                 </div>
                 {loading ? (
@@ -110,8 +116,8 @@ const AllCurrencies = () => {
                 <>
                 <table className="table-auto min-w-full">
                     <thead>
-                        <tr className='bg-emerald-100 text-gray-700 dark:bg-emerald-800 dark:text-gray-200 text-base text-center' >
-                            <th className='cursor-pointer px-6 py-3 rounded-l-lg' onClick={() => {
+                        <tr className='bg-emerald-100 text-gray-700 dark:bg-emerald-800 dark:text-gray-200 text-sm sm:text-base text-center' >
+                            <th className='cursor-pointer ps-3 pe-1 py-1 sm:px-6 sm:py-3 rounded-l-lg' onClick={() => {
                                 if(params.orderBy == "name") {
                                     fetch({orderBy: "-name"});
                                 } else {
@@ -124,7 +130,7 @@ const AllCurrencies = () => {
                                     {params.orderBy == "-name" && ( <><MoveDown size={14} /></>)}
                                 </div>
                             </th>
-                            <th className='cursor-pointer px-6 py-3' onClick={() => {
+                            <th className='cursor-pointer px-1 py-1 sm:px-6 sm:py-3' onClick={() => {
                                 if(params.orderBy == "code") {
                                     fetch({orderBy: "-code"});
                                 } else {
@@ -137,7 +143,7 @@ const AllCurrencies = () => {
                                     {params.orderBy == "-code" && ( <><MoveDown size={14} /></>)}
                                 </div>
                             </th>
-                            <th className='cursor-pointer px-6 py-3' onClick={() => {
+                            <th className='cursor-pointer px-1 py-1 sm:px-6 sm:py-3' onClick={() => {
                                 if(params.orderBy == "table") {
                                     fetch({orderBy: "-table"});
                                 } else {
@@ -150,16 +156,16 @@ const AllCurrencies = () => {
                                     {params.orderBy == "-table" && ( <><MoveDown size={14} /></>)}
                                 </div>
                             </th>
-                            <th className='cursor-pointer px-6 py-3 rounded-r-lg'>Kraje</th>
+                            <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3 rounded-r-lg'>Kraje</th>
                         </tr>
                     </thead>
                     <tbody>
                     {currencies.results.map((currency, idx) => (
-                        <tr key={idx} className="text-gray-700 dark:text-gray-100 text-sm">
-                            <td className='px-6 py-4 '>{currency.name}</td>
-                            <td className='px-6 py-4 text-center'>{currency.code}</td>
-                            <td className='px-6 py-4 text-center'>{currency.table}</td>
-                            <td className='flex fle-row flex-wrap align-middle px-6 py-4'>
+                        <tr key={idx} className="text-gray-700 dark:text-gray-100 text-xs sm:text-sm border-b-1 border-emerald-500">
+                            <td className='ps-3 pe-1 py-1 sm:px-6 sm:py-4 '>{currency.name}</td>
+                            <td className='px-1 py-1 sm:px-6 sm:py-4 text-center'>{currency.code}</td>
+                            <td className='px-1 py-1 sm:px-6 sm:py-4 text-center'>{currency.table}</td>
+                            <td className='flex fle-row flex-wrap align-middle ps-1 pe-3 py-1 sm:px-6 sm:py-4'>
                                 {currency.countries.map((country, idx) => (
                                     <span key={idx} className='p-1'><img src={country.flag+'#svgView(preserveAspectRatio(none))'} className='w-[30px] h-[20px]'/></span>
                                 ))}
