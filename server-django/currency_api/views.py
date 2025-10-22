@@ -1,6 +1,9 @@
 import requests
 from pprint import pprint
 
+# potrzeben ?
+import json,requests
+
 from .models import Currency,Country
 from .pagination import CustomPagination
 from .filters import CurrencyFilter

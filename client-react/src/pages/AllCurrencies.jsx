@@ -156,6 +156,7 @@ const AllCurrencies = () => {
                                     {params.orderBy == "-table" && ( <><MoveDown size={14} /></>)}
                                 </div>
                             </th>
+                            <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3'>Kurs</th>
                             <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3 rounded-r-lg'>Kraje</th>
                         </tr>
                     </thead>
@@ -165,6 +166,7 @@ const AllCurrencies = () => {
                             <td className='ps-3 pe-1 py-1 sm:px-6 sm:py-4 '>{currency.name}</td>
                             <td className='px-1 py-1 sm:px-6 sm:py-4 text-center'>{currency.code}</td>
                             <td className='px-1 py-1 sm:px-6 sm:py-4 text-center'>{currency.table}</td>
+                            <td className='px-1 py-1 sm:px-6 sm:py-4 text-center'>{currency.rate}</td>
                             <td className='flex fle-row flex-wrap align-middle ps-1 pe-3 py-1 sm:px-6 sm:py-4'>
                                 {currency.countries.map((country, idx) => (
                                     <span key={idx} className='p-1'><img src={country.flag+'#svgView(preserveAspectRatio(none))'} className='w-[30px] h-[20px]'/></span>
