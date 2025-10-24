@@ -25,7 +25,7 @@ const Main = () => {
                 <Route path="/powitanie" element={<Welcome/>} />
                 <Route path="/allCurrencies" element={<AllCurrencies/>} />
                 <Route path="/countries" element={<Countries/>} />
-                <Route path="/currency" element={<Currency/>} />
+                <Route path="/currency/*" element={<Currency/>} />
                 <Route path="/myCurrencies" element={<MyCurrencies/>} />
                 <Route path="/aiPrediction" element={<AIPrediction/>} />
             </Routes>

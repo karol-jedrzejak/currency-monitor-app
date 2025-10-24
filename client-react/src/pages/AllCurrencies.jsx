@@ -5,6 +5,9 @@ import { Loader } from "lucide-react";
 import axiosInstance from '../axiosInstance';
 import { MoveDown,MoveUp,X,Search } from 'lucide-react';
 
+import { Link } from "react-router-dom"
+import { useLocation } from 'react-router'
+
 import Input from '../components/Input';
 import Frame from '../components/Frame';
 import TopCenter from '../layout/TopCenter';
@@ -23,7 +26,8 @@ const AllCurrencies = () => {
         name: '',
         orderBy: "name",
     });
-
+    const location = useLocation();
+    const { hash, pathname, search_loc } = location;
 
     const updateParams = (update_params) => {
         let new_params = params;
@@ -157,7 +161,8 @@ const AllCurrencies = () => {
                                 </div>
                             </th>
                             <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3'>Kurs</th>
-                            <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3 rounded-r-lg'>Kraje</th>
+                            <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3'>Kraje</th>
+                            <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3 rounded-r-lg'></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -169,9 +174,14 @@ const AllCurrencies = () => {
                             <td className='px-1 py-1 sm:px-6 sm:py-4 text-center'>{currency.rate}</td>
                             <td className='flex fle-row flex-wrap align-middle ps-1 pe-3 py-1 sm:px-6 sm:py-4'>
                                 {currency.countries.map((country, idx) => (
-                                    <span key={idx} className='p-1'><img src={country.flag+'#svgView(preserveAspectRatio(none))'} className='w-[30px] h-[20px]'/></span>
+                                    <span key={idx} className='p-1'><img src={country.flag+'#svgView(preserveAspectRatio(none))'} className='w-[30px] h-[20px]  border-1 border-gray-500 rounded-md'/></span>
                                 ))}
                             </td>
+                            <td><Link to={'/currency/'+currency.id} ><Search className="
+                        rounded-md border-1 border-gray-500 p-1 w-[30px] h-[30px]
+                        bg-emerald-100 hover:bg-emerald-400 hover:shadow-md
+                        dark:bg-gray-800 dark:hover:bg-emerald-600 dark:hover:text-gray-900 dark:hover:shadow-md dark:shadow-emerald-900 dark:hover:border-emerald-500
+                        cursor-pointer" size={16}/></Link></td>
                         </tr>  
                     ))}
                     </tbody>
