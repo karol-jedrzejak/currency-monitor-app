@@ -1,9 +1,13 @@
 import React from "react"
-
+import { useContext } from "react";
 import axios from 'axios';  
 import axiosInstance from '../axiosInstance';
 
-import { useEffect, useState } from 'react';
+import formatDate_d_m_y from "../utilities/formatDate";
+
+import { useEffect, useState,useMemo } from 'react';
+
+import { AppStateContext } from "../AppStateProvider";
 
 import TopCenter from '../layout/TopCenter';
 import Frame from '../components/Frame';
@@ -82,6 +86,8 @@ const Currency = () => {
 
     if(Object.hasOwn(data, "info") &&  Object.hasOwn(data, "rates_mid"))
     {
+
+      data.percentage_change = calc_percentage(data.rates_mid[0].mid,data.rates_mid[data.rates_mid.length-1].mid)
       setCurrency(data);
       console.log(data);
 
@@ -126,6 +132,11 @@ const Currency = () => {
 
   }
 
+  const calc_percentage = (start,end) => {
+    let percentage = (end/start-1)*100;
+    return percentage.toFixed(2);
+  }
+
   useEffect(() => {
       const path_id = location.pathname.split("/")[2];
       if(Number.isInteger(parseInt(path_id)))
@@ -155,15 +166,20 @@ const Currency = () => {
               ) : (
               <>
                 <Frame>
-                  <div className="pb-4">Nazwa: {currency.info.name}</div>
-                  <div>Kod: {currency.info.code}</div>
-                  <div className="pb-4">Tabela: {currency.info.table}</div>
-                  <div className="pb-4">W ilu krajach: {currency.info.countries.length}</div>
-                  <div className="pb-4">Zmiana w ostatnich 255 dniach: {currency.rates_mid[0].mid - currency.rates_mid[currency.rates_mid.length-1].mid}</div>
+                  <div className="text-center text-2xl font-semibold pb-8">{currency.info.code}</div>
+                  <div className="pb-4"><span className="font-semibold">Nazwa:</span> {currency.info.name}</div>
+                  <div><span className="font-semibold">Kod:</span> {currency.info.code}</div>
+                  <div className="pb-4"><span className="font-semibold">Tabela:</span> {currency.info.table}</div>
+                  <div className="pb-4"><span className="font-semibold">W ilu krajach:</span> {currency.info.countries.length}</div>
+                  <div className="pb-4"><span className="font-semibold">Aktualny kurs:</span> {currency.rates_mid[currency.rates_mid.length-1].mid} <span className="text-gray-500 italic text-xs">[z dnia {formatDate_d_m_y(currency.rates_mid[currency.rates_mid.length-1].effectiveDate)}]</span></div>
+                  <div className="pb-4"><span className="font-semibold">Zmiana w ostatnich 255 kursach:</span>
+                    <span className={`${currency.percentage_change>0 ? 'text-green-500' : 'text-red-500'}`+" px-2"}>{currency.percentage_change}%</span>
+                    <span className="text-gray-500 italic text-xs">[{formatDate_d_m_y(currency.rates_mid[0].effectiveDate)} do {formatDate_d_m_y(currency.rates_mid[currency.rates_mid.length-1].effectiveDate)}]</span>
+                  </div>
                   {currency.rates_trade && (
                     <>
-                      <div>Kupno (NBP): {currency.rates_trade[0].bid}</div>
-                      <div>Sprzedaż (NBP): {currency.rates_trade[0].ask}</div>
+                      <div><span className="font-semibold">Kupno (NBP):</span> {currency.rates_trade[0].bid}</div>
+                      <div><span className="font-semibold">Sprzedaż (NBP):</span> {currency.rates_trade[0].ask}</div>
                     </>
                   )}
                 </Frame>

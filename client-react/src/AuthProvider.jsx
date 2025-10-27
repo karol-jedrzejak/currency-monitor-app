@@ -11,6 +11,8 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
 
     const navigate = useNavigate();
+
+    const [loadingUser, setLoadingUser] = useState(true);
     const [user, setUser] = useState(null);
 
         // Login function
@@ -23,6 +25,7 @@ const AuthProvider = ({ children }) => {
                     refresh_token: data.refresh,
                     user: username,
                 })
+            setLoadingUser(false);
             navigate('/powitanie');
         };
 
@@ -32,6 +35,7 @@ const AuthProvider = ({ children }) => {
             localStorage.removeItem('refresh_token');
             localStorage.removeItem('user');
             setUser(null);
+            setLoadingUser(false);
             navigate('/login');
         };
 
@@ -76,6 +80,7 @@ const AuthProvider = ({ children }) => {
                 refresh_token: refresh_token,
                 user: localStorage.getItem('user'),       
             });
+            setLoadingUser(false);
         } else if (!refreshExpired) {
             refreshTokens().then(() => {
                 setUser({
@@ -83,6 +88,7 @@ const AuthProvider = ({ children }) => {
                     refresh_token: localStorage.getItem('refresh_token'),
                     user: localStorage.getItem('user'),
                 });
+                setLoadingUser(false);
             });
         } else {
             logout();
@@ -90,7 +96,7 @@ const AuthProvider = ({ children }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user,loadingUser, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

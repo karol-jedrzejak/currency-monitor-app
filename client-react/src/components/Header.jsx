@@ -31,8 +31,8 @@ const Header = () => {
         <div className="hidden lg:flex items-center space-x-6">
             {authData.user ? ( 
               <> 
-                <Link to="/allCurrencies" className={(pathname=="/allCurrencies" ? activeClass : notActiveClass)}>Waluty</Link>
-                <Link to="/currency" className={(pathname=="/currency" ? activeClass : notActiveClass)}>Waluta</Link>
+                <Link to="/topCurrencies" className={(pathname=="/topCurrencies" ? activeClass : notActiveClass)}>Top Waluty</Link>
+                <Link to="/allCurrencies" className={(pathname=="/allCurrencies" || pathname.split("/")[1]=="currency" ? activeClass : notActiveClass)}>Waluty</Link>
                 <Link to="/countries" className={(pathname=="/countries" ? activeClass : notActiveClass)}>Kraje</Link>
                 <Link to="/aiPrediction" className={(pathname=="/aiPrediction" ? activeClass : notActiveClass)}>Predykcja AI</Link>
                 <Link to="/myCurrencies" className={(pathname=="/myCurrencies" ? activeClass : notActiveClass)}>Moje Waluty</Link>
@@ -90,8 +90,8 @@ const Header = () => {
           </div>
           {authData.user ? ( 
             <>
+              <Link to="/topCurrencies" onClick={() => setMenuOpen(false)} className="">Top Waluty</Link>
               <Link to="/allCurrencies" onClick={() => setMenuOpen(false)} className="">Waluty</Link>
-              <Link to="/currency" onClick={() => setMenuOpen(false)} className="">Waluta</Link>
               <Link to="/countries" onClick={() => setMenuOpen(false)} className="">Kraje</Link>
               <Link to="/aiPrediction" onClick={() => setMenuOpen(false)} className="">Predykcja AI</Link>
               <Link to="/myCurrencies" onClick={() => setMenuOpen(false)} className="">Moje Waluty</Link>
