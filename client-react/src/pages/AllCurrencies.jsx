@@ -24,7 +24,7 @@ const AllCurrencies = () => {
         page_num: 1,
         table: null,
         name: '',
-        orderBy: "name",
+        order_by: "name",
     });
     const location = useLocation();
     const { hash, pathname, search_loc } = location;
@@ -34,7 +34,7 @@ const AllCurrencies = () => {
         for (const param in update_params) {
             new_params[param] = update_params[param];
         }
-        if(params.name != new_params.name || params.orderBy != new_params.orderBy)
+        if(params.name != new_params.name || params.order_by != new_params.order_by)
         {
             new_params.page_num = 1;
         }
@@ -122,42 +122,42 @@ const AllCurrencies = () => {
                     <thead>
                         <tr className='bg-emerald-100 text-gray-700 dark:bg-emerald-800 dark:text-gray-200 text-sm sm:text-base text-center' >
                             <th className='cursor-pointer ps-3 pe-1 py-1 sm:px-6 sm:py-3 rounded-l-lg' onClick={() => {
-                                if(params.orderBy == "name") {
-                                    fetch({orderBy: "-name"});
+                                if(params.order_by == "name") {
+                                    fetch({order_by: "-name"});
                                 } else {
-                                    fetch({orderBy: "name"});
+                                    fetch({order_by: "name"});
                                 }
                                 }}>
                                 <div className='flex flex-row items-center'>
                                     <div>Nazwa</div>
-                                    {params.orderBy == "name" && ( <><MoveUp size={14} /></>)}
-                                    {params.orderBy == "-name" && ( <><MoveDown size={14} /></>)}
+                                    {params.order_by == "name" && ( <><MoveUp size={14} /></>)}
+                                    {params.order_by == "-name" && ( <><MoveDown size={14} /></>)}
                                 </div>
                             </th>
                             <th className='cursor-pointer px-1 py-1 sm:px-6 sm:py-3' onClick={() => {
-                                if(params.orderBy == "code") {
-                                    fetch({orderBy: "-code"});
+                                if(params.order_by == "code") {
+                                    fetch({order_by: "-code"});
                                 } else {
-                                    fetch({orderBy: "code"});
+                                    fetch({order_by: "code"});
                                 }
                             }}>
                                 <div className='flex flex-row items-center'>
                                     <div>Kod</div>
-                                    {params.orderBy == "code" && ( <><MoveUp size={14} /></>)}
-                                    {params.orderBy == "-code" && ( <><MoveDown size={14} /></>)}
+                                    {params.order_by == "code" && ( <><MoveUp size={14} /></>)}
+                                    {params.order_by == "-code" && ( <><MoveDown size={14} /></>)}
                                 </div>
                             </th>
                             <th className='cursor-pointer px-1 py-1 sm:px-6 sm:py-3' onClick={() => {
-                                if(params.orderBy == "table") {
-                                    fetch({orderBy: "-table"});
+                                if(params.order_by == "table") {
+                                    fetch({order_by: "-table"});
                                 } else {
-                                    fetch({orderBy: "table"});
+                                    fetch({order_by: "table"});
                                 }
                             }}>
                                 <div className='flex flex-row items-center'>
                                     <div>Tabela</div>
-                                    {params.orderBy == "table" && ( <><MoveUp size={14} /></>)}
-                                    {params.orderBy == "-table" && ( <><MoveDown size={14} /></>)}
+                                    {params.order_by == "table" && ( <><MoveUp size={14} /></>)}
+                                    {params.order_by == "-table" && ( <><MoveDown size={14} /></>)}
                                 </div>
                             </th>
                             <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3'>Kurs</th>

@@ -14,16 +14,16 @@ const Footer = () => {
               {authData.user ? ( 
                 <> 
                   <li className="my-1">
-                    <Link className="hover:underline hover:text-gray-900 dark:hover:text-gray-100 me-4 md:me-6" to="/allCurrencies">Waluty</Link>
+                    <Link to="/topCurrencies" className="hover:underline hover:text-gray-900 dark:hover:text-gray-100 me-4 md:me-6">Top Waluty</Link>
                   </li>
                   <li className="my-1">
-                      <Link to="/currency" className="hover:underline hover:text-gray-900 dark:hover:text-gray-100 me-4 md:me-6">Waluta</Link>
+                    <Link to="/buySellRates" className="hover:underline hover:text-gray-900 dark:hover:text-gray-100 me-4 md:me-6">Wymienialne</Link>
+                  </li>
+                  <li className="my-1">
+                    <Link to="/allCurrencies" className="hover:underline hover:text-gray-900 dark:hover:text-gray-100 me-4 md:me-6">Waluty</Link>
                   </li>
                   <li className="my-1">
                       <Link to="/countries" className="hover:underline hover:text-gray-900 dark:hover:text-gray-100 me-4 md:me-6">Kraje</Link>
-                  </li>
-                  <li className="my-1">
-                      <Link to="/aiPrediction" className="hover:underline hover:text-gray-900 dark:hover:text-gray-100 me-4 md:me-6">Predykcja AI</Link>
                   </li>
                   <li className="my-1">
                       <Link to="/myCurrencies" className="hover:underline hover:text-gray-900 dark:hover:text-gray-100 me-4 md:me-6">Moje Waluty</Link>

@@ -32,9 +32,9 @@ const Header = () => {
             {authData.user ? ( 
               <> 
                 <Link to="/topCurrencies" className={(pathname=="/topCurrencies" ? activeClass : notActiveClass)}>Top Waluty</Link>
+                <Link to="/buySellRates" className={(pathname=="/buySellRates" ? activeClass : notActiveClass)}>Wymienialne</Link>
                 <Link to="/allCurrencies" className={(pathname=="/allCurrencies" || pathname.split("/")[1]=="currency" ? activeClass : notActiveClass)}>Waluty</Link>
                 <Link to="/countries" className={(pathname=="/countries" ? activeClass : notActiveClass)}>Kraje</Link>
-                <Link to="/aiPrediction" className={(pathname=="/aiPrediction" ? activeClass : notActiveClass)}>Predykcja AI</Link>
                 <Link to="/myCurrencies" className={(pathname=="/myCurrencies" ? activeClass : notActiveClass)}>Moje Waluty</Link>
                 <button className="
                     cursor-pointer
@@ -91,9 +91,9 @@ const Header = () => {
           {authData.user ? ( 
             <>
               <Link to="/topCurrencies" onClick={() => setMenuOpen(false)} className="">Top Waluty</Link>
+              <Link to="/buySellRates" onClick={() => setMenuOpen(false)} className="">Wymienialne</Link>
               <Link to="/allCurrencies" onClick={() => setMenuOpen(false)} className="">Waluty</Link>
               <Link to="/countries" onClick={() => setMenuOpen(false)} className="">Kraje</Link>
-              <Link to="/aiPrediction" onClick={() => setMenuOpen(false)} className="">Predykcja AI</Link>
               <Link to="/myCurrencies" onClick={() => setMenuOpen(false)} className="">Moje Waluty</Link>
               <button className="cursor-pointer" onClick={() => {
                 setMenuOpen(false);

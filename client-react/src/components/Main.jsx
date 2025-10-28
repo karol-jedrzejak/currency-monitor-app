@@ -15,6 +15,7 @@ import AIPrediction from "../pages/AIPrediction";
 import ErrorPage from "../pages/ErrorPage";
 import TopCurrencies from "../pages/TopCurrencies";
 import LoadingPage from "../pages/LoadingPage";
+import BuySellRates from "../pages/BuySellRates";
 
 const Main = () => {
   const authData = useContext(AuthContext);
@@ -32,6 +33,7 @@ const Main = () => {
                   <Route path="/powitanie" element={<Welcome/>} />
                   <Route path="/topCurrencies" element={<TopCurrencies/>} />
                   <Route path="/allCurrencies" element={<AllCurrencies/>} />
+                  <Route path="/buySellRates" element={<BuySellRates/>} />
                   <Route path="/currency/*" element={<Currency/>} />
                   <Route path="/countries" element={<Countries/>} />
                   <Route path="/myCurrencies" element={<MyCurrencies/>} />

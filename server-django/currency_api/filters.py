@@ -6,7 +6,7 @@ class CurrencyFilter(django_filters.FilterSet):
     table = django_filters.CharFilter(field_name='table')
     """ name = django_filters.CharFilter(field_name='name', lookup_expr="icontains", method='name_or_code') """
     name = django_filters.CharFilter(method='name_or_code')
-    orderBy = django_filters.OrderingFilter(fields=(
+    order_by = django_filters.OrderingFilter(fields=(
             ('name', 'name'),
             ('code', 'code'),
             ('table', 'table'),

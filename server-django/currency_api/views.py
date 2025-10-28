@@ -7,7 +7,7 @@ import json,requests
 from .models import Currency,Country
 from .pagination import CustomPagination
 from .filters import CurrencyFilter
-from .serializers import CurrencySerializer,CountrySerializer
+from .serializers import CurrencySerializer,CountrySerializer,StockPredictionSerializer
 
 from django.db.models import Exists, OuterRef
 from django.http import HttpResponse,JsonResponse,Http404
@@ -19,6 +19,13 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 from rest_framework.filters import SearchFilter,OrderingFilter
 from rest_framework.permissions import IsAuthenticated, AllowAny
+
+import pandas as pd
+import numpy as np
+import matplotlib as mpl
+from datetime import datetime
+from sklearn.preprocessing import MinMaxScaler
+from keras.models import load_model
 
 NBP_API_URL = "https://api.nbp.pl/api/exchangerates/tables/c/?format=json"
 
@@ -84,10 +91,75 @@ class CountryViewSet (viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     pagination_class = CustomPagination
     filter_backends = [SearchFilter,OrderingFilter]
-    search_fields = ["name"]
-    ordering_fields = ["id","name"]
+    search_fields = ["name","official_name"]
+    ordering_fields = ["id","name","official_name","region"]
     #filterset_fields = ['name']
     
+
+@permission_classes((permissions.AllowAny,))
+class StockPrediction(APIView):
+    def post(self,request):
+        serializer = StockPredictionSerializer(data=request.data)
+        if serializer.is_valid():
+            ticker = serializer.validated_data['ticker']
+            blad = False
+
+            try:
+                # 1. Wykonanie zapytania GET do API
+                response = requests.get("https://api.nbp.pl/api/exchangerates/rates/a/"+ticker+"/last/255/", timeout=10) # Ustawienie timeoutu
+                # 2. Sprawdzenie, czy odpowiedź jest poprawna (status 200)
+                response.raise_for_status() 
+                # 3. Parsowanie danych JSON na słownik Pythona
+                data = response.json()
+                
+            except requests.exceptions.RequestException as e:
+                # Obsługa błędów związanych z zapytaniem (np. brak połączenia, timeout)
+                blad = f"Błąd połączenia z API: {e}"
+            except Exception as e:
+                # Inne błędy (np. błąd parsowania JSON, choć requests.json() to obsługuje)
+                blad = f"Wystąpił nieoczekiwany błąd: {e}"
+
+            if blad:
+                return  Response({'status': "error", 'info': blad})
+
+            df = pd.DataFrame.from_records(data['rates'])
+
+            data_training = pd.DataFrame(df.mid[0:int(len(df)*0.7)])
+            data_testing = pd.DataFrame(df.mid[int(len(df)*0.7):int(len(df))])
+
+            scaler = MinMaxScaler(feature_range=(0,1))
+
+            model = load_model("D:\Priv\Github\currency-monitor-app\server-django\currency_api\currency_predict.keras")
+
+            last_100_days = data_training.tail(100)
+            future = pd.DataFrame([0], columns=['mid'])
+            final_df = pd.concat([last_100_days,data_testing,future],ignore_index=True)
+
+            input_data = scaler.fit_transform(final_df)
+
+            test_x = []
+            test_y = []
+            for i in range (100,input_data.shape[0]):
+                test_x.append(input_data[i-100:i])
+                test_y.append(input_data[i,0])
+            test_x,test_y = np.array(test_x),np.array(test_y)
+
+            y_predicted = model.predict(test_x)
+
+            y_predicted = scaler.inverse_transform(y_predicted.reshape(-1,1)).flatten()
+            test_y = scaler.inverse_transform(test_y.reshape(-1,1)).flatten()
+
+            return Response({
+                'status': "ok", 
+                'tomorrow_price': y_predicted[-1],
+                })
+
+
+
+
+
+
+
 def test_countries(request):
     return render(request, 'countries.html', {'countries': Country.objects.all()})
 

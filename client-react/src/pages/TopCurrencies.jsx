@@ -1,11 +1,17 @@
 import React from 'react';
 import { useEffect, useState, useContext } from 'react';
+import { Link } from "react-router-dom"
+
+import {Search } from 'lucide-react';
 
 import axios from 'axios';  
 import axiosInstance from '../axiosInstance';
 
 import Frame from '../components/Frame';
 import TopCenter from '../layout/TopCenter';
+import CenterCenter from '../layout/CenterCenter';
+
+import LoadingPage from '../components/LoadingFrame';
 
 import { AppStateContext } from "../AppStateProvider";
 
@@ -20,8 +26,10 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import { Table } from 'lucide-react';
 
 const TopCurrencies = () => {
+
     const appState = useContext(AppStateContext);
     const [error, setError] = useState(false);
     const [currencies, setCurrencies] = useState(null);
@@ -54,33 +62,6 @@ const TopCurrencies = () => {
         },
     ];
 
-    const get_from_nbp_api = async (currency_code) => {
-        try {
-            const response = await axios.get("https://api.nbp.pl/api/exchangerates/rates/a/"+currency_code+"/last/255/");
-            return {
-                ok: true,
-                data: response.data.rates
-            };
-        } catch (error) {
-            return { ok: false,error};
-        }
-    }
-
-    const get_from_app_api = async(currency_id) => {
-        try {
-            const response = await axiosInstance.get('/currencies_vs/'+currency_id);
-            return {
-                ok: true,
-                data: response.data
-            };
-        } catch (error) {
-            return {
-                ok: false,
-                data: error
-            };
-        }
-    }
-
     const fetch = async () => {
 
         let data = []
@@ -89,10 +70,12 @@ const TopCurrencies = () => {
             try {
             const response1 = await axiosInstance.get('/currencies_vs/' + currency.id);
             const response2 = await axios.get("https://api.nbp.pl/api/exchangerates/rates/a/" + currency.code + "/last/255/");
+            const response3 = await axios.get('https://api.nbp.pl/api/exchangerates/rates/C/' + currency.code + '/');
 
             data.push({
                 ...response1.data,
                 rates: response2.data.rates,
+                buySell: response3.data.rates[0],
                 borderColor: currency.borderColor,
                 backgroundColor: currency.backgroundColor,
             });
@@ -101,9 +84,8 @@ const TopCurrencies = () => {
             }
         }
 
-        console.log(data);
         setCurrencies(data);
-        
+        console.log(data);
 
         let chart = {};
 
@@ -146,10 +128,6 @@ const TopCurrencies = () => {
             legend: {
                 position: 'top',
             },
-            title: {
-                display: true,
-                text: 'Kurs',
-            },
             },
             responsive:true,
             maintainAspectRatio:true,
@@ -175,10 +153,6 @@ const TopCurrencies = () => {
             legend: {
                 position: 'top',
             },
-            title: {
-                display: true,
-                text: 'Kurs Dark',
-            },
             },
             responsive:true,
             maintainAspectRatio:true,
@@ -203,39 +177,69 @@ const TopCurrencies = () => {
             options_dark: chart_options_dark
         });
 
-
-
     }
 
     useEffect(() => {
         fetch();
-        console.log(currencies);
     }, []);
 
     return (
-        <TopCenter>
-            <Frame>
-                <div className='flex flex-col sm:flex-row items-center justify-between mb-4'>
-                    <h2 className='text-center text-emerald-800 dark:text-emerald-300 text-lg font-bold mx-4'>TOP WALUTY</h2>
-                </div>
-            </Frame>
-        {currencies ? (
-            <>
-            {chartsData && (
-                <Frame className="relative w-[100%]">
-                    <Line className="w-[800px] h-[600px]" 
-                    //options={chartsData.options}
-                    options={appState.darkTheme ? chartsData.options_dark : chartsData.options_light}
-                    data={chartsData.data} />
-                </Frame>
+        <>
+            {currencies ? (
+                <TopCenter classNameIn={"lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0 space-y-4"}>
+                    <Frame>
+                        <div className='text-center mb-4'>
+                            <h2 className='text-center text-emerald-800 dark:text-emerald-300 text-lg font-bold mx-4'>TOP WALUTY</h2>
+                        </div>
+                        <table className="table-auto min-w-full">
+                            <thead>
+                                <tr className='bg-emerald-100 text-gray-700 dark:bg-emerald-800 dark:text-gray-200 text-sm sm:text-base text-center' >
+                                    <th className='cursor-pointer ps-3 pe-1 py-1 sm:px-6 sm:py-3 rounded-l-lg'>Kurs</th>
+                                    <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3'>Kod</th>
+                                    <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3'>Kupno</th>
+                                    <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3'>Sprzedaż</th>
+                                    <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3 rounded-r-lg'></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {currencies.map((country, id) => (
+                                    <tr key={id} className='text-center'>
+                                        <td className='p-2'>{country.name}</td>
+                                        <td className='p-2'>{country.code}</td>
+                                        <td className='p-2'>{country.buySell.bid}</td>
+                                        <td className='p-2'>{country.buySell.ask}</td>
+                                        <td className='p-2'>
+                                            <Link to={'/currency/'+country.id} ><Search className="
+                                            rounded-md border-1 border-gray-500 p-1 w-[30px] h-[30px]
+                                            bg-emerald-100 hover:bg-emerald-400 hover:shadow-md
+                                            dark:bg-gray-800 dark:hover:bg-emerald-600 dark:hover:text-gray-900 dark:hover:shadow-md dark:shadow-emerald-900 dark:hover:border-emerald-500
+                                            cursor-pointer" size={16}/></Link>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </Frame>
+                    <Frame className="relative w-[100%]">
+                        <div>
+                            <h2 className="text-center text-emerald-800 dark:text-emerald-300 text-lg font-bold mb-4">
+                                WYKRES ZMIANY WALUT
+                            </h2>
+                        </div>
+                        <Line className="w-[800px] h-[600px] p-2" 
+                        options={appState.darkTheme ? chartsData.options_dark : chartsData.options_light}
+                        data={chartsData.data} />
+                    </Frame>
+                </TopCenter>
+                
+            ):(
+                <>
+                    <CenterCenter>
+                        <LoadingPage/>
+                    </CenterCenter>
+                </>
             )}
-            </>
-        ):(
-            <>
-                <div>Loading</div>
-            </>
-        )}
-        </TopCenter>
+        </>
     );
 };
 

@@ -9,6 +9,8 @@ router.register('countries_vs', views.CountryViewSet, basename='countries')
 
 urlpatterns = [
 
+    path("stock_prediction/", views.StockPrediction.as_view(), name="stock_prediction"),
+
     path("register/", UserViews.UserRegister.as_view(), name="account-create"),
 
     path("countries_html", views.test_countries, name="test_countries"),
