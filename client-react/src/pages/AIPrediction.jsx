@@ -28,7 +28,7 @@ const AIPrediction = () => {
     return (
     <TopCenter>
         <Frame>
-            Predykcja AI
+            Predykcja AI TEST
         </Frame>
     </TopCenter>
     );
