@@ -53,7 +53,7 @@ const Countries = () => {
                 urlParams += param+"="+params[param]+"&"
             }
         }
-        let url = '/countries_vs/?'+urlParams;
+        let url = '/countries/?'+urlParams;
         setLoading(true);
         try {
             const response = await axiosInstance.get(url)

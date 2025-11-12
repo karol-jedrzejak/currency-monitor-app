@@ -68,7 +68,7 @@ const TopCurrencies = () => {
 
         for (const currency of top_currencies) {
             try {
-            const response1 = await axiosInstance.get('/currencies_vs/' + currency.id);
+            const response1 = await axiosInstance.get('/currencies/' + currency.id);
             const response2 = await axios.get("https://api.nbp.pl/api/exchangerates/rates/a/" + currency.code + "/last/255/");
             const response3 = await axios.get('https://api.nbp.pl/api/exchangerates/rates/C/' + currency.code + '/');
 

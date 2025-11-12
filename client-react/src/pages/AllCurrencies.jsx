@@ -54,7 +54,7 @@ const AllCurrencies = () => {
                 urlParams += param+"="+params[param]+"&"
             }
         }
-        let url = '/currencies_vs/?'+urlParams;
+        let url = '/currencies/?'+urlParams;
         setLoading(true);
         try {
             const response = await axiosInstance.get(url)

@@ -10,7 +10,11 @@ import { useEffect, useState,useMemo } from 'react';
 import { AppStateContext } from "../AppStateProvider";
 
 import TopCenter from '../layout/TopCenter';
+import CenterCenter from '../layout/CenterCenter';
 import Frame from '../components/Frame';
+
+import LoadingFrame from '../components/LoadingFrame';
+import ErrorFrame from '../components/ErrorFrame';
 
 import {
   Chart as ChartJS,
@@ -47,7 +51,7 @@ const Currency = () => {
     let data = {}
 
     // Currency Info
-    let url_info = '/currencies_vs/'+path_id;
+    let url_info = '/currencies/'+path_id;
     try {
       const response_info = await axiosInstance.get(url_info)
       data.info = response_info.data
@@ -156,62 +160,66 @@ const Currency = () => {
  */
   return (
     <>
-      <TopCenter classNameIn={"lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0 space-y-4"}>
         {error ? (
-          <>
-          Błąd
-          </>
+              <>
+                <CenterCenter>
+                  <div>Blad</div>
+                    <ErrorFrame text="Wystąpił błąd"/>
+                </CenterCenter>
+              </>
           ) : (
           <>
             {loading ? (
               <>
-                Ładowanie
+                <CenterCenter>
+                    <LoadingFrame/>
+                </CenterCenter>
               </>
               ) : (
               <>
-                <Frame>
-                  <div className="text-center text-2xl font-semibold pb-8">{currency.info.code}</div>
-                  <div className="pb-4"><span className="font-semibold">Nazwa:</span> {currency.info.name}</div>
-                  <div><span className="font-semibold">Kod:</span> {currency.info.code}</div>
-                  <div className="pb-4"><span className="font-semibold">Tabela:</span> {currency.info.table}</div>
-                  <div className="pb-4"><span className="font-semibold">W ilu krajach:</span> {currency.info.countries.length}</div>
-                  <div className="pb-4"><span className="font-semibold">Aktualny kurs:</span> {currency.rates_mid[currency.rates_mid.length-1].mid} <span className="text-gray-500 italic text-xs">[z dnia {formatDate_d_m_y(currency.rates_mid[currency.rates_mid.length-1].effectiveDate)}]</span></div>
-                  {currency.info.table=="A" && (
-                    <>
-                      <div className="pb-4"><span className="font-semibold">Predykcja AI na jutro:</span> <span className="text-purple-600 dark:text-purple-300">{currency.prediction.toFixed(4)}</span></div>
-                    </>
-                  )}
-                  <div className="pb-4"><span className="font-semibold">Zmiana w ostatnich 255 kursach:</span>
-                    <span className={`${currency.percentage_change>0 ? 'text-green-500' : 'text-red-500'}`+" px-2"}>{currency.percentage_change}%</span>
-                    <span className="text-gray-500 italic text-xs">[{formatDate_d_m_y(currency.rates_mid[0].effectiveDate)} do {formatDate_d_m_y(currency.rates_mid[currency.rates_mid.length-1].effectiveDate)}]</span>
-                  </div>
-                  {currency.rates_trade && (
-                    <>
-                      <div><span className="font-semibold">Kupno (NBP):</span> {currency.rates_trade[0].bid}</div>
-                      <div><span className="font-semibold">Sprzedaż (NBP):</span> {currency.rates_trade[0].ask}</div>
-                    </>
-                  )}
-                </Frame>
-                <Frame className="relative w-[100%]">
-                  <Line className="w-[100%]" options={chartsOptions} data={chartsData} />
-                </Frame>
-                <Frame className="col-span-2">
-                  <div className="text-center">Kraje:</div>
-                  <div className="flex fle-row flex-wrap align-middle">
-                    {currency.info.countries.map((country, idx) => (
-                      <span key={idx} className='p-1  text-xs'><img src={country.flag+'#svgView(preserveAspectRatio(none))'} className='w-[60px] h-[40px] lg:w-[100px] lg:h-[60px] border-1 border-gray-500 rounded-sm'/></span>
-                    ))}
-                  </div>
-                </Frame>
+                <TopCenter classNameIn={"lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0 space-y-4"}>
+                  <Frame>
+                    <div className="text-center text-2xl font-semibold pb-8">{currency.info.code}</div>
+                    <div className="pb-4"><span className="font-semibold">Nazwa:</span> {currency.info.name}</div>
+                    <div><span className="font-semibold">Kod:</span> {currency.info.code}</div>
+                    <div className="pb-4"><span className="font-semibold">Tabela:</span> {currency.info.table}</div>
+                    <div className="pb-4"><span className="font-semibold">W ilu krajach:</span> {currency.info.countries.length}</div>
+                    <div className="pb-4"><span className="font-semibold">Aktualny kurs:</span> {currency.rates_mid[currency.rates_mid.length-1].mid} <span className="text-gray-500 italic text-xs">[z dnia {formatDate_d_m_y(currency.rates_mid[currency.rates_mid.length-1].effectiveDate)}]</span></div>
+                    {currency.info.table=="A" && (
+                      <>
+                        <div className="pb-4"><span className="font-semibold">Predykcja AI na jutro:</span> <span className="text-purple-600 dark:text-purple-300">{currency.prediction.toFixed(4)}</span></div>
+                      </>
+                    )}
+                    <div className="pb-4"><span className="font-semibold">Zmiana w ostatnich 255 kursach:</span>
+                      <span className={`${currency.percentage_change>0 ? 'text-green-500' : 'text-red-500'}`+" px-2"}>{currency.percentage_change}%</span>
+                      <span className="text-gray-500 italic text-xs">[{formatDate_d_m_y(currency.rates_mid[0].effectiveDate)} do {formatDate_d_m_y(currency.rates_mid[currency.rates_mid.length-1].effectiveDate)}]</span>
+                    </div>
+                    {currency.rates_trade && (
+                      <>
+                        <div><span className="font-semibold">Kupno (NBP):</span> {currency.rates_trade[0].bid}</div>
+                        <div><span className="font-semibold">Sprzedaż (NBP):</span> {currency.rates_trade[0].ask}</div>
+                      </>
+                    )}
+                  </Frame>
+                  <Frame className="relative w-[100%]">
+                    <Line className="w-[100%]" options={chartsOptions} data={chartsData} />
+                  </Frame>
+                  <Frame className="col-span-2">
+                    <div className="text-center">Kraje:</div>
+                    <div className="flex fle-row flex-wrap align-middle">
+                      {currency.info.countries.map((country, idx) => (
+                        <span key={idx} className='p-1  text-xs'><img src={country.flag+'#svgView(preserveAspectRatio(none))'} className='w-[60px] h-[40px] lg:w-[100px] lg:h-[60px] border-1 border-gray-500 rounded-sm'/></span>
+                      ))}
+                    </div>
+                  </Frame>
+                </TopCenter>
               </>
             )}
           </>
         )}
-      </TopCenter>
     </>
   )
 }
 
 export default Currency
 
-//className="max-w-[600px] min-w-[400px] min-h-[200px] max-h-[400px]"

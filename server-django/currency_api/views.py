@@ -79,8 +79,7 @@ def currency_type(request,id):
 class CurrenciesViewSet (viewsets.ModelViewSet):
     queryset = Currency.objects.all()
     serializer_class = CurrencySerializer
-    #permission_classes = (IsAuthenticated,)
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
     pagination_class = CustomPagination
     filterset_class = CurrencyFilter
 
@@ -88,16 +87,14 @@ class CurrenciesViewSet (viewsets.ModelViewSet):
 class CountryViewSet (viewsets.ModelViewSet):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
     pagination_class = CustomPagination
     filter_backends = [SearchFilter,OrderingFilter]
     search_fields = ["name","official_name"]
     ordering_fields = ["id","name","official_name","region"]
-    #filterset_fields = ['name']
     
-
-@permission_classes((permissions.AllowAny,))
 class StockPrediction(APIView):
+    permission_classes = (IsAuthenticated,)
     def post(self,request):
         serializer = StockPredictionSerializer(data=request.data)
         if serializer.is_valid():
@@ -105,18 +102,13 @@ class StockPrediction(APIView):
             blad = False
 
             try:
-                # 1. Wykonanie zapytania GET do API
                 response = requests.get("https://api.nbp.pl/api/exchangerates/rates/a/"+ticker+"/last/255/", timeout=10) # Ustawienie timeoutu
-                # 2. Sprawdzenie, czy odpowiedź jest poprawna (status 200)
                 response.raise_for_status() 
-                # 3. Parsowanie danych JSON na słownik Pythona
                 data = response.json()
                 
             except requests.exceptions.RequestException as e:
-                # Obsługa błędów związanych z zapytaniem (np. brak połączenia, timeout)
                 blad = f"Błąd połączenia z API: {e}"
             except Exception as e:
-                # Inne błędy (np. błąd parsowania JSON, choć requests.json() to obsługuje)
                 blad = f"Wystąpił nieoczekiwany błąd: {e}"
 
             if blad:
@@ -154,25 +146,8 @@ class StockPrediction(APIView):
                 'tomorrow_price': y_predicted[-1],
                 })
 
-
-
-
-
-
-
-def test_countries(request):
-    return render(request, 'countries.html', {'countries': Country.objects.all()})
-
-def test_currencies(request):
-    return render(request, 'currencies.html', {'currencies': Currency.objects.all()})
-
-
-def find_countries(request):
-    return render(request, 'currencies.html', {'currencies': Currency.objects.all()})
-
-
 class CurrencyByCodeView(APIView):
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (IsAuthenticated,)
     def get(self, request):
         codes = request.query_params.get('code')
         if not codes:
@@ -186,7 +161,25 @@ class CurrencyByCodeView(APIView):
 
 
 
+
+
+
+
+
 """
+
+def test_countries(request):
+    return render(request, 'countries.html', {'countries': Country.objects.all()})
+
+def test_currencies(request):
+    return render(request, 'currencies.html', {'currencies': Currency.objects.all()})
+
+
+def find_countries(request):
+    return render(request, 'currencies.html', {'currencies': Currency.objects.all()})
+
+
+
 # ClassView
 class CurrenciesClassView(APIView):
     permission_classes = (permissions.AllowAny,)
@@ -308,22 +301,13 @@ class CurrenciesViewSet (viewsets.ModelViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
         currency.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-"""
-
-
-
-
-
-
-
-
 
 
 
 def nbp_api(request):
-    """
+
     Pobiera i wyświetla aktualne kursy walut z API NBP (tabela C).
-    """
+
     dane_kursow = None
     blad = None
 
@@ -360,3 +344,5 @@ def nbp_api(request):
 
     #return HttpResponse(dane_kursow['rates'])
     return render(request, 'test.html', {'dane': dane_kursow})
+
+"""
