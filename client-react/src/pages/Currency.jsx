@@ -176,7 +176,11 @@ const Currency = () => {
                   <div className="pb-4"><span className="font-semibold">Tabela:</span> {currency.info.table}</div>
                   <div className="pb-4"><span className="font-semibold">W ilu krajach:</span> {currency.info.countries.length}</div>
                   <div className="pb-4"><span className="font-semibold">Aktualny kurs:</span> {currency.rates_mid[currency.rates_mid.length-1].mid} <span className="text-gray-500 italic text-xs">[z dnia {formatDate_d_m_y(currency.rates_mid[currency.rates_mid.length-1].effectiveDate)}]</span></div>
-                  <div className="pb-4"><span className="font-semibold">Predykcja AI na jutro:</span> <span className="text-purple-600 dark:text-purple-300">{currency.prediction.toFixed(4)}</span></div>
+                  {currency.info.table=="A" && (
+                    <>
+                      <div className="pb-4"><span className="font-semibold">Predykcja AI na jutro:</span> <span className="text-purple-600 dark:text-purple-300">{currency.prediction.toFixed(4)}</span></div>
+                    </>
+                  )}
                   <div className="pb-4"><span className="font-semibold">Zmiana w ostatnich 255 kursach:</span>
                     <span className={`${currency.percentage_change>0 ? 'text-green-500' : 'text-red-500'}`+" px-2"}>{currency.percentage_change}%</span>
                     <span className="text-gray-500 italic text-xs">[{formatDate_d_m_y(currency.rates_mid[0].effectiveDate)} do {formatDate_d_m_y(currency.rates_mid[currency.rates_mid.length-1].effectiveDate)}]</span>
