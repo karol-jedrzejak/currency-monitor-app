@@ -6,6 +6,7 @@ from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register('currencies', views.CurrenciesViewSet, basename='currencies')
 router.register('countries', views.CountryViewSet, basename='countries')
+router.register('user_transactions', views.UserCurrencyTransactionViewSet, basename='user_transactions')
 
 urlpatterns = [
     path("stock_prediction/", views.StockPrediction.as_view(), name="stock_prediction"),

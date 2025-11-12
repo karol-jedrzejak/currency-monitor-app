@@ -10,7 +10,7 @@ import Login from "../pages/Login";
 import AllCurrencies from "../pages/AllCurrencies";
 import Countries from "../pages/Countries";
 import Currency from "../pages/Currency";
-import MyCurrencies from "../pages/MyCurrencies";
+import MyCurrenciesIndex from "../pages/MyCurrencies/Index";
 import ErrorPage from "../pages/ErrorPage";
 import TopCurrencies from "../pages/TopCurrencies";
 import LoadingPage from "../pages/LoadingPage";
@@ -35,7 +35,7 @@ const Main = () => {
                   <Route path="/buySellRates" element={<BuySellRates/>} />
                   <Route path="/currency/*" element={<Currency/>} />
                   <Route path="/countries" element={<Countries/>} />
-                  <Route path="/myCurrencies" element={<MyCurrencies/>} />
+                  <Route path="/myCurrencies" element={<MyCurrenciesIndex />} />
                   <Route path='*' element={<ErrorPage/>} />
               </Routes>
             ):(

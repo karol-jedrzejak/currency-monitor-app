@@ -4,18 +4,18 @@ from pprint import pprint
 # potrzeben ?
 import json,requests
 
-from .models import Currency,Country
+from .models import Currency,Country,UserCurrencyTransaction
 from .pagination import CustomPagination
 from .filters import CurrencyFilter
-from .serializers import CurrencySerializer,CountrySerializer,StockPredictionSerializer,CurrencyIdSerializer
+from .serializers import CurrencySerializer,CountrySerializer,StockPredictionSerializer,CurrencyIdSerializer,UserCurrencyTransactionSerializer,UserCurrencyTransactionSumSerializer
 
-from django.db.models import Exists, OuterRef
+from django.db.models import Exists, OuterRef,Sum
 from django.http import HttpResponse,JsonResponse,Http404
 from django.shortcuts import render
 
 from rest_framework.response import Response
 from rest_framework import status,permissions,mixins,generics,viewsets
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes,action
 from rest_framework.views import APIView
 from rest_framework.filters import SearchFilter,OrderingFilter
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -160,13 +160,90 @@ class CurrencyByCodeView(APIView):
 
 
 
+class UserCurrencyTransactionViewSet(viewsets.ModelViewSet):
+    """
+    Standardowy CRUD + dodatkowy endpoint /summary/
+    """
+    queryset = UserCurrencyTransaction.objects.all()
+    serializer_class = UserCurrencyTransactionSerializer
+    permission_classes = (IsAuthenticated,)
 
+    def get_queryset(self):
+        return UserCurrencyTransaction.objects.filter(user=self.request.user)
 
+    #def perform_create(self, serializer):
+        #serializer.save(user=self.request.user)
 
+    def create(self, request):
+        serializer = UserCurrencyTransactionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=self.request.user)
+            return Response("ok", status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['get'])
+    def summary(self, request):
+
+        qs = (
+            self.get_queryset()
+            .select_related('currency')
+            .values('currency__id', 'currency__name', 'currency__code')
+            .annotate(total_amount=Sum('amount'))
+            .filter(total_amount__isnull=False)
+            .exclude(total_amount=0)
+        )
+
+        data = [
+            {
+                "currency": {
+                    "id": item["currency__id"],
+                    "name": item["currency__name"],
+                    "code": item["currency__code"]
+                },
+                "total_amount": item["total_amount"]
+            }
+            for item in qs
+        ]
+
+        serializer = UserCurrencyTransactionSumSerializer(data, many=True)
+        return Response(serializer.data)
+    
 
 
 
 """
+class UserCurrencyTransactions(viewsets.ModelViewSet):
+    serializer_class = UserCurrencyTransactionSerializer
+    permission_classes = (IsAuthenticated,)
+    def get_queryset(self):
+        return UserCurrencyTransaction.objects.filter(user=self.request.user)
+
+
+
+class UserCurrencyTransactionsSum(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        queryset = (
+            UserCurrencyTransaction.objects
+            .filter(user=request.user)
+            .values('currency__code')
+            .annotate(total_amount=sum('amount'))
+            .filter(total_amount__isnull=False)
+            .exclude(total_amount=0)
+        )
+
+        data = [
+            {'currency': item['currency__code'], 'total_amount': item['total_amount']}
+            for item in queryset
+        ]
+
+        serializer = UserCurrencyTransactionSumSerializer(data, many=True)
+        return Response(serializer.data)
+
+
+
+
 
 def test_countries(request):
     return render(request, 'countries.html', {'countries': Country.objects.all()})

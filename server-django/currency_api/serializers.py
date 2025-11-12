@@ -1,10 +1,9 @@
 from rest_framework import routers, serializers, viewsets
-from .models import Currency,Country
+from .models import Currency,Country,UserCurrencyTransaction
 from .nbp_service import get_nbp_rates
 
 class StockPredictionSerializer(serializers.Serializer):
     ticker = serializers.CharField(max_length=20)
-
 
 class SimpleCurrencySerializer(serializers.ModelSerializer):
     rate = serializers.SerializerMethodField()
@@ -46,3 +45,15 @@ class CurrencyIdSerializer(serializers.ModelSerializer):
     class Meta:
         model = Currency
         fields = ['id', 'name', 'code']
+
+class UserCurrencyTransactionSerializer(serializers.ModelSerializer):
+    currency = CurrencyIdSerializer(read_only=True)
+
+    class Meta:
+        model = UserCurrencyTransaction
+        fields = ['id', 'currency', 'user','amount', 'created_at']
+
+
+class UserCurrencyTransactionSumSerializer(serializers.Serializer):
+    currency = CurrencyIdSerializer()
+    total_amount = serializers.DecimalField(max_digits=20, decimal_places=2)

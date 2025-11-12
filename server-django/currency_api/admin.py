@@ -1,9 +1,8 @@
 from django.contrib import admin
-from .models import Currency,Country
+from .models import Currency,Country,UserCurrencyTransaction
 
 # Register your models here.
 @admin.register(Currency)
-
 class CurrencyAdmin(admin.ModelAdmin):
     fields = ["name", "code", "table", "countries"] # Specify fields to be displayed in the admin form
     list_display = ["id","name", "code", "table"]    # Fields to be displayed in the admin list view
@@ -16,3 +15,10 @@ class CountryAdmin(admin.ModelAdmin):
     list_display = ["id","name", "official_name", "flag","region","ccn3"]    # Fields to be displayed in the admin list view
     list_filter = ["name", "official_name", "flag","region","ccn3"]   # Filters available in the admin list view
     search_fields = ["name", "official_name", "flag","region","ccn3"]    # Fields to be searchable in the admin interface
+
+@admin.register(UserCurrencyTransaction)
+class UserCurrencyTransactionAdmin(admin.ModelAdmin):
+    fields = ["user", "currency", "amount"] # Specify fields to be displayed in the admin form
+    list_display = ["id", "user", "currency", "amount", "created_at"]    # Fields to be displayed in the admin list view
+    list_filter = ["user", "currency", "amount", "created_at"]   # Filters available in the admin list view
+    search_fields = ["user__username", "currency__code"]    # Fields to be searchable in the admin interfaces
