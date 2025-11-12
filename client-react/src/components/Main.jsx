@@ -11,7 +11,6 @@ import AllCurrencies from "../pages/AllCurrencies";
 import Countries from "../pages/Countries";
 import Currency from "../pages/Currency";
 import MyCurrencies from "../pages/MyCurrencies";
-import AIPrediction from "../pages/AIPrediction";
 import ErrorPage from "../pages/ErrorPage";
 import TopCurrencies from "../pages/TopCurrencies";
 import LoadingPage from "../pages/LoadingPage";
@@ -37,7 +36,6 @@ const Main = () => {
                   <Route path="/currency/*" element={<Currency/>} />
                   <Route path="/countries" element={<Countries/>} />
                   <Route path="/myCurrencies" element={<MyCurrencies/>} />
-                  <Route path="/aiPrediction" element={<AIPrediction/>} />
                   <Route path='*' element={<ErrorPage/>} />
               </Routes>
             ):(

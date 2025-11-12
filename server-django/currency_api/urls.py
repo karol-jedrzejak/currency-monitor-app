@@ -11,6 +11,9 @@ urlpatterns = [
 
     path("stock_prediction/", views.StockPrediction.as_view(), name="stock_prediction"),
 
+    path("currency_by_code/", views.CurrencyByCodeView.as_view(), name="currency_by_code"),
+
+
     path("register/", UserViews.UserRegister.as_view(), name="account-create"),
 
     path("countries_html", views.test_countries, name="test_countries"),

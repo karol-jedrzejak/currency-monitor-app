@@ -7,7 +7,7 @@ import json,requests
 from .models import Currency,Country
 from .pagination import CustomPagination
 from .filters import CurrencyFilter
-from .serializers import CurrencySerializer,CountrySerializer,StockPredictionSerializer
+from .serializers import CurrencySerializer,CountrySerializer,StockPredictionSerializer,CurrencyIdSerializer
 
 from django.db.models import Exists, OuterRef
 from django.http import HttpResponse,JsonResponse,Http404
@@ -167,6 +167,21 @@ def test_currencies(request):
     return render(request, 'currencies.html', {'currencies': Currency.objects.all()})
 
 
+def find_countries(request):
+    return render(request, 'currencies.html', {'currencies': Currency.objects.all()})
+
+
+class CurrencyByCodeView(APIView):
+    permission_classes = (permissions.AllowAny,)
+    def get(self, request):
+        codes = request.query_params.get('code')
+        if not codes:
+            return Response({"error": "Parametr 'code' jest wymagany !"}, status=400)
+
+        code_list = [c.strip().upper() for c in codes.split(',')]
+        currencies = Currency.objects.filter(code__in=code_list)
+        serializer = CurrencyIdSerializer(currencies, many=True)
+        return Response(serializer.data)
 
 
 

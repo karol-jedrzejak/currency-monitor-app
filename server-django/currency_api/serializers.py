@@ -41,3 +41,8 @@ class CurrencySerializer(serializers.ModelSerializer):
         if not hasattr(self, "_rates_cache"):
             self._rates_cache = get_nbp_rates()
         return self._rates_cache.get(obj.code)
+    
+class CurrencyIdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Currency
+        fields = ['id', 'name', 'code']

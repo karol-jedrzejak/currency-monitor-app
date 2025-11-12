@@ -27,6 +27,23 @@ const BuySellRates = () => {
             console.error("Błąd:", err);
         }
 
+        let urlCurrenciesId = '/currency_by_code/?code=';
+        data.forEach(element => {
+            urlCurrenciesId += element.code + ',';
+        });
+
+        let currenciesId = {};
+        try {
+            const response = await axiosInstance.get(urlCurrenciesId)
+            currenciesId = response.data;
+        } catch (error) {
+            console.error("Błąd:", error);
+        }
+
+        data.forEach(element => {
+            element.id = currenciesId.find(item => item.code === element.code).id;
+        });
+
         setCurrencies(data);
         console.log(data);
     }
@@ -50,23 +67,23 @@ const BuySellRates = () => {
                                     <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3'>Kod</th>
                                     <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3'>Kupno</th>
                                     <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3'>Sprzedaż</th>
-                                    {/* <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3 rounded-r-lg'></th> */}
+                                    <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3 rounded-r-lg'></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {currencies.map((country,id) => (
+                                {currencies.map((currency,id) => (
                                     <tr key={id} className='text-center'>
-                                        <td className='p-2'>{country.currency}</td>
-                                        <td className='p-2'>{country.code}</td>
-                                        <td className='p-2'>{country.bid}</td>
-                                        <td className='p-2'>{country.ask}</td>
-{/*                                         <td className='p-2'>
-                                            <Link to={'/currency/'+country.id} ><Search className="
+                                        <td className='p-2'>{currency.currency}</td>
+                                        <td className='p-2'>{currency.code}</td>
+                                        <td className='p-2'>{currency.bid}</td>
+                                        <td className='p-2'>{currency.ask}</td>
+                                        <td className='p-2'>
+                                            <Link to={'/currency/'+currency.id} ><Search className="
                                             rounded-md border-1 border-gray-500 p-1 w-[30px] h-[30px]
                                             bg-emerald-100 hover:bg-emerald-400 hover:shadow-md
                                             dark:bg-gray-800 dark:hover:bg-emerald-600 dark:hover:text-gray-900 dark:hover:shadow-md dark:shadow-emerald-900 dark:hover:border-emerald-500
                                             cursor-pointer" size={16}/></Link>
-                                        </td> */}
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
