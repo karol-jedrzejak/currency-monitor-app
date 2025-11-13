@@ -187,49 +187,53 @@ const TopCurrencies = () => {
         <>
             {currencies ? (
                 <TopCenter classNameIn={"lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0 space-y-4"}>
-                    <Frame>
-                        <div className='text-center mb-4'>
-                            <h2 className='text-center text-emerald-800 dark:text-emerald-300 text-lg font-bold mx-4'>TOP WALUTY</h2>
-                        </div>
-                        <table className="table-auto min-w-full">
-                            <thead>
-                                <tr className='bg-emerald-100 text-gray-700 dark:bg-emerald-800 dark:text-gray-200 text-sm sm:text-base text-center' >
-                                    <th className='cursor-pointer ps-3 pe-1 py-1 sm:px-6 sm:py-3 rounded-l-lg'>Kurs</th>
-                                    <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3'>Kod</th>
-                                    <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3'>Kupno</th>
-                                    <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3'>Sprzedaż</th>
-                                    <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3 rounded-r-lg'></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {currencies.map((country, id) => (
-                                    <tr key={id} className='text-center'>
-                                        <td className='p-2'>{country.name}</td>
-                                        <td className='p-2'>{country.code}</td>
-                                        <td className='p-2'>{country.buySell.bid}</td>
-                                        <td className='p-2'>{country.buySell.ask}</td>
-                                        <td className='p-2'>
-                                            <Link to={'/currency/'+country.id} ><Search className="
-                                            rounded-md border-1 border-gray-500 p-1 w-[30px] h-[30px]
-                                            bg-emerald-100 hover:bg-emerald-400 hover:shadow-md
-                                            dark:bg-gray-800 dark:hover:bg-emerald-600 dark:hover:text-gray-900 dark:hover:shadow-md dark:shadow-emerald-900 dark:hover:border-emerald-500
-                                            cursor-pointer" size={16}/></Link>
-                                        </td>
+                    <div>
+                        <Frame>
+                            <div className='text-center mb-4'>
+                                <h2 className='text-center text-emerald-800 dark:text-emerald-300 text-lg font-bold mx-4'>TOP WALUTY</h2>
+                            </div>
+                            <table className="table-auto min-w-full">
+                                <thead>
+                                    <tr className='bg-emerald-100 text-gray-700 dark:bg-emerald-800 dark:text-gray-200 text-sm sm:text-base text-center' >
+                                        <th className='cursor-pointer ps-3 pe-1 py-1 sm:px-6 sm:py-3 rounded-l-lg'>Kurs</th>
+                                        <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3'>Kod</th>
+                                        <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3'>Kupno</th>
+                                        <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3'>Sprzedaż</th>
+                                        <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3 rounded-r-lg'></th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </Frame>
-                    <Frame className="relative w-[100%]">
-                        <div>
-                            <h2 className="text-center text-emerald-800 dark:text-emerald-300 text-lg font-bold mb-4">
-                                WYKRES ZMIANY WALUT
-                            </h2>
-                        </div>
-                        <Line className="w-[800px] h-[600px] p-2" 
-                        options={appState.darkTheme ? chartsData.options_dark : chartsData.options_light}
-                        data={chartsData.data} />
-                    </Frame>
+                                </thead>
+                                <tbody>
+                                    {currencies.map((country, id) => (
+                                        <tr key={id} className='text-center'>
+                                            <td className='p-2'>{country.name}</td>
+                                            <td className='p-2'>{country.code}</td>
+                                            <td className='p-2'>{country.buySell.bid}</td>
+                                            <td className='p-2'>{country.buySell.ask}</td>
+                                            <td className='p-2'>
+                                                <Link to={'/currency/'+country.id} ><Search className="
+                                                rounded-md border-1 border-gray-500 p-1 w-[30px] h-[30px]
+                                                bg-emerald-100 hover:bg-emerald-400 hover:shadow-md
+                                                dark:bg-gray-800 dark:hover:bg-emerald-600 dark:hover:text-gray-900 dark:hover:shadow-md dark:shadow-emerald-900 dark:hover:border-emerald-500
+                                                cursor-pointer" size={16}/></Link>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </Frame>
+                    </div>
+                    <div>
+                        <Frame className="relative w-[100%]">
+                            <div>
+                                <h2 className="text-center text-emerald-800 dark:text-emerald-300 text-lg font-bold mb-4">
+                                    WYKRES ZMIANY WALUT
+                                </h2>
+                            </div>
+                            <Line className="w-[800px] h-[600px] p-2" 
+                            options={appState.darkTheme ? chartsData.options_dark : chartsData.options_light}
+                            data={chartsData.data} />
+                        </Frame>
+                    </div>
                 </TopCenter>
                 
             ):(

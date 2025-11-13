@@ -57,3 +57,8 @@ class UserCurrencyTransactionSerializer(serializers.ModelSerializer):
 class UserCurrencyTransactionSumSerializer(serializers.Serializer):
     currency = CurrencyIdSerializer()
     total_amount = serializers.DecimalField(max_digits=20, decimal_places=2)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["total_amount"] = float(data["total_amount"])
+        return data
