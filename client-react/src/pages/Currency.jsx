@@ -94,7 +94,6 @@ const Currency = () => {
       {
 
         data.percentage_change = calc_percentage(data.rates_mid[0].mid,data.rates_mid[data.rates_mid.length-1].mid)
-        setCurrency(data);
 
         const chart_labels_mid = data.rates_mid.map(item => item.effectiveDate);
         
@@ -127,7 +126,8 @@ const Currency = () => {
         };
     
         setChartsData(chart_data_mid);
-        setChartsOptions(chart_options_mid)
+        setChartsOptions(chart_options_mid);
+        setCurrency(data);
       } else {
         setError("Błąd przy pobieraniu danych.");
       }

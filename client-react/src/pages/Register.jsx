@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 
+import axios from 'axios';
+
 import CenterCenter from '../layout/CenterCenter';
 import Frame from '../components/Frame';
 import Input from '../components/Input';
 import Button from '../components/Button';
 
-import axios from 'axios';
 import { Loader } from "lucide-react";
 
 const Register = () => {

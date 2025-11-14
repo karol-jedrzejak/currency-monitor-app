@@ -2,6 +2,7 @@ import React from "react"
 
 import TopCenter from '../layout/TopCenter';
 import Frame from '../components/Frame';
+
 import { BadgeCent } from "lucide-react";
 
 const Welcome = () => {
