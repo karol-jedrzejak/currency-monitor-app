@@ -15,14 +15,13 @@ import CenterCenter from '../layout/CenterCenter';
 import Pagination from '../components/Pagination';
 
 const Countries = () => {
+    const [search, setSearch] = useState("");
     const [countries, setCountries] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const [search, setSearch] = useState('');
-
     const [params, setParams] = useState({
         page_num: 1,
-        search: '',
+        search: "",
         order_by: "name",
     });
     const location = useLocation();
@@ -45,7 +44,10 @@ const Countries = () => {
         {
             updateParams(update_params);
         }
-        setSearch(params.name);
+        if(update_params && update_params.name !== undefined)
+        {
+            setSearch(params.name);
+        }
         let urlParams='';
         for (const param in params) {
             if(params[param])
@@ -58,7 +60,6 @@ const Countries = () => {
         try {
             const response = await axiosInstance.get(url)
             setCountries(response.data);
-             console.log(response.data);
             setLoading(false);
         } catch (error) {
             console.error("Error fetching data:", error);

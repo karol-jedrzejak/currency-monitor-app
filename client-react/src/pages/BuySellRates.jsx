@@ -2,20 +2,23 @@ import React from 'react';
 import { useEffect, useState, useContext } from 'react';
 import { Link } from "react-router-dom"
 
-import {Search } from 'lucide-react';
-
 import axios from 'axios';  
 import axiosInstance from '../axiosInstance';
 
 import Frame from '../components/Frame';
+import ErrorFrame from '../components/ErrorFrame';
+import LoadingFrame from '../components/LoadingFrame';
+
 import TopCenter from '../layout/TopCenter';
 import CenterCenter from '../layout/CenterCenter';
 
-import LoadingPage from '../components/LoadingFrame';
+import {Search } from 'lucide-react';
 
 const BuySellRates = () => {
 
+    const [error, setError] = useState(false);
     const [currencies, setCurrencies] = useState(null);
+
     const fetch = async () => {
 
         let data = []
@@ -24,28 +27,38 @@ const BuySellRates = () => {
             const response = await axios.get("https://api.nbp.pl/api/exchangerates/tables/c/today/");
             data=response.data[0].rates;
         } catch (err) {
+            setError("Błąd przy pobieraniu danych.");
             console.error("Błąd:", err);
         }
 
-        let urlCurrenciesId = '/currency_by_code/?code=';
-        data.forEach(element => {
-            urlCurrenciesId += element.code + ',';
-        });
+        if(data)
+        {
+            let urlCurrenciesId = '/currency_by_code/?code=';
+            data.forEach(element => {
+                urlCurrenciesId += element.code + ',';
+            });
 
-        let currenciesId = {};
-        try {
-            const response = await axiosInstance.get(urlCurrenciesId)
-            currenciesId = response.data;
-        } catch (error) {
-            console.error("Błąd:", error);
+            let currenciesId = {};
+            try {
+                const response = await axiosInstance.get(urlCurrenciesId)
+                currenciesId = response.data;
+            } catch (error) {
+                console.error("Błąd:", error);
+                setError("Błąd przy pobieraniu danych.");
+            }
+            if(currenciesId.length === 0)
+            {
+                data.forEach(element => {
+                    element.id = currenciesId.find(item => item.code === element.code).id;
+                });
+
+                setCurrencies(data);
+            } else{
+                setError("Błąd przy pobieraniu danych.");
+            }
+        } else {
+            setError("Błąd przy pobieraniu danych.");
         }
-
-        data.forEach(element => {
-            element.id = currenciesId.find(item => item.code === element.code).id;
-        });
-
-        setCurrencies(data);
-        console.log(data);
     }
 
     useEffect(() => {
@@ -93,10 +106,20 @@ const BuySellRates = () => {
                 
             ):(
                 <>
-                    <CenterCenter>
-                        <LoadingPage/>
-                    </CenterCenter>
-                </>
+                    {error ? (
+                        <>
+                            <CenterCenter>
+                                <ErrorFrame text={error}/>
+                            </CenterCenter>
+                        </>
+                    ):(
+                        <>
+                            <CenterCenter>
+                                <LoadingFrame/>
+                            </CenterCenter>
+                        </>
+                    )}
+                </> 
             )}
         </>
     );

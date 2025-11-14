@@ -2,31 +2,24 @@ import React from 'react';
 import { useEffect, useState, useContext } from 'react';
 import { Link } from "react-router-dom"
 
-import {Search } from 'lucide-react';
+
+import { AppStateContext } from "../AppStateProvider";
 
 import axios from 'axios';  
 import axiosInstance from '../axiosInstance';
 
+
 import Frame from '../components/Frame';
+import ErrorFrame from '../components/ErrorFrame';
+import LoadingFrame from '../components/LoadingFrame';
+
 import TopCenter from '../layout/TopCenter';
 import CenterCenter from '../layout/CenterCenter';
 
-import LoadingPage from '../components/LoadingFrame';
 
-import { AppStateContext } from "../AppStateProvider";
-
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
+import {Search } from 'lucide-react';
 import { Line } from 'react-chartjs-2';
-import { Table } from 'lucide-react';
+
 
 const TopCurrencies = () => {
 
@@ -80,103 +73,105 @@ const TopCurrencies = () => {
                 backgroundColor: currency.backgroundColor,
             });
             } catch (err) {
-            console.error("Błąd:", err);
+                setError("Błąd przy pobieraniu danych.");
+                console.error("Błąd:", err);
             }
         }
 
-        setCurrencies(data);
-        console.log(data);
+        if(data.length === top_currencies.length)
+        {
+            setCurrencies(data);
 
-        let chart = {};
-
-        const chart_labels = data[0].rates.map(item => item.effectiveDate);
-      
-        const chart_data = {
-            labels: chart_labels,
-            datasets: [
-            {
-                label: data[0].code,
-                data: data[0].rates.map(item => item.mid),
-                borderColor: data[0].borderColor,
-                backgroundColor: data[0].backgroundColor,
-            },
-            {
-                label: data[1].code,
-                data: data[1].rates.map(item => item.mid),
-                borderColor: data[1].borderColor,
-                backgroundColor: data[1].backgroundColor,
-            },
-            {
-                label: data[2].code,
-                data: data[2].rates.map(item => item.mid),
-                borderColor: data[2].borderColor,
-                backgroundColor: data[2].backgroundColor,
-            },
-            {
-                label: data[3].code,
-                data: data[3].rates.map(item => item.mid),
-                borderColor: data[3].borderColor,
-                backgroundColor: data[3].backgroundColor,
-            },
-            ],
-        };
-
-        const chart_options_light = {
-            color: "#000000",
-            responsive: true,
-            plugins: {
-            legend: {
-                position: 'top',
-            },
-            },
-            responsive:true,
-            maintainAspectRatio:true,
-            pointRadius: 1,
-            scales: {
-                x: {
-                    ticks: {
-                        color: '#181818',
-                    }
+            const chart_labels = data[0].rates.map(item => item.effectiveDate);
+        
+            const chart_data = {
+                labels: chart_labels,
+                datasets: [
+                {
+                    label: data[0].code,
+                    data: data[0].rates.map(item => item.mid),
+                    borderColor: data[0].borderColor,
+                    backgroundColor: data[0].backgroundColor,
                 },
-                y: {
-                    ticks: {
-                        color: '#181818',
+                {
+                    label: data[1].code,
+                    data: data[1].rates.map(item => item.mid),
+                    borderColor: data[1].borderColor,
+                    backgroundColor: data[1].backgroundColor,
+                },
+                {
+                    label: data[2].code,
+                    data: data[2].rates.map(item => item.mid),
+                    borderColor: data[2].borderColor,
+                    backgroundColor: data[2].backgroundColor,
+                },
+                {
+                    label: data[3].code,
+                    data: data[3].rates.map(item => item.mid),
+                    borderColor: data[3].borderColor,
+                    backgroundColor: data[3].backgroundColor,
+                },
+                ],
+            };
+
+            const chart_options_light = {
+                color: "#000000",
+                responsive: true,
+                plugins: {
+                legend: {
+                    position: 'top',
+                },
+                },
+                responsive:true,
+                maintainAspectRatio:true,
+                pointRadius: 1,
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#181818',
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: '#181818',
+                        }
                     }
                 }
-            }
-        };
+            };
 
-        const chart_options_dark = {
-            color: "#FFFFFF",
-            responsive: true,
-            plugins: {
-            legend: {
-                position: 'top',
-            },
-            },
-            responsive:true,
-            maintainAspectRatio:true,
-            pointRadius: 1,
-            scales: {
-                x: {
-                    ticks: {
-                        color: '#F2F2F2',
-                    }
+            const chart_options_dark = {
+                color: "#FFFFFF",
+                responsive: true,
+                plugins: {
+                legend: {
+                    position: 'top',
                 },
-                y: {
-                    ticks: {
-                        color: '#F2F2F2',
+                },
+                responsive:true,
+                maintainAspectRatio:true,
+                pointRadius: 1,
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#F2F2F2',
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: '#F2F2F2',
+                        }
                     }
                 }
-            }
-        };
-    
-        setChartsData({
-            data: chart_data,
-            options_light: chart_options_light,
-            options_dark: chart_options_dark
-        });
-
+            };
+        
+            setChartsData({
+                data: chart_data,
+                options_light: chart_options_light,
+                options_dark: chart_options_dark
+            });
+        } else{
+            setError("Błąd przy pobieraniu danych.");
+        }
     }
 
     useEffect(() => {
@@ -238,10 +233,20 @@ const TopCurrencies = () => {
                 
             ):(
                 <>
-                    <CenterCenter>
-                        <LoadingPage/>
-                    </CenterCenter>
-                </>
+                    {error ? (
+                        <>
+                            <CenterCenter>
+                                <ErrorFrame text={error}/>
+                            </CenterCenter>
+                        </>
+                    ):(
+                        <>
+                            <CenterCenter>
+                                <LoadingFrame/>
+                            </CenterCenter>
+                        </>
+                    )}
+                </>      
             )}
         </>
     );
