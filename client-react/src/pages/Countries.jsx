@@ -45,7 +45,6 @@ const Countries = () => {
         });
     };
 
-
     useEffect(() => {
         const fetchData = async () => {
             let urlParams = "";

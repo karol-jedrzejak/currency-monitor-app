@@ -48,13 +48,12 @@ const BuySellRates = () => {
             }
             if(currenciesId.length === 0)
             {
+                setError("Błąd przy pobieraniu danych.");
+            } else{
                 data.forEach(element => {
                     element.id = currenciesId.find(item => item.code === element.code).id;
                 });
-
                 setCurrencies(data);
-            } else{
-                setError("Błąd przy pobieraniu danych.");
             }
         } else {
             setError("Błąd przy pobieraniu danych.");
