@@ -15,7 +15,7 @@ import CenterCenter from '../../layout/CenterCenter';
 import Input from '../../components/Input';
 import Pagination from '../../components/Pagination';
 
-import {SquarePlus,MoveDown,MoveUp,X,Search } from 'lucide-react';
+import {Plus,MoveDown,MoveUp,X,Search,PencilLine,Trash2} from 'lucide-react';
 
 const MyCurrenciesIndex = () => {
 
@@ -152,6 +152,15 @@ const MyCurrenciesIndex = () => {
             {transactions && summary.length!=0 ? (
                 <Frame>
                     <div className='flex flex-col sm:flex-row items-center justify-between mb-4'>
+                        <Link to="/addMyCurrency">
+                            <Plus
+                                className="rounded-md border-1 border-gray-500 p-2 w-[40px] h-[40px]
+                                    bg-emerald-100 hover:bg-emerald-400 hover:shadow-md
+                                    dark:bg-gray-800 dark:hover:bg-emerald-600
+                                    cursor-pointer"
+                            />
+                        </Link>
+
                         <h2 className='text-center text-emerald-800 dark:text-emerald-300 text-lg font-bold mx-4'>
                             WSZYSTKIE TRANSAKCJE
                         </h2>
@@ -248,15 +257,26 @@ const MyCurrenciesIndex = () => {
                                     <td className='px-1 py-1 sm:px-6 sm:py-4 text-center'>{transaction.amount}</td>
                                     <td className='px-1 py-1 sm:px-6 sm:py-4 text-center'>{new Date(transaction.created_at).toLocaleString("pl-PL")}</td>
                                     <td className='text-center'>
-                                        <Link to={`/currency/${transaction.id}`}>
-                                            <Search
-                                                className="rounded-md border-1 border-gray-500 p-1 w-[30px] h-[30px]
-                                                    bg-emerald-100 hover:bg-emerald-400 hover:shadow-md
-                                                    dark:bg-gray-800 dark:hover:bg-emerald-600
-                                                    cursor-pointer"
-                                                size={16}
-                                            />
-                                        </Link>
+                                        <div className='flex p-2'>
+                                            <Link className='px-1' to={`/editMyCurrency/${transaction.id}`}>
+                                                <PencilLine
+                                                    className="rounded-md border-1 border-gray-500 p-1 w-[30px] h-[30px]
+                                                        bg-orange-100 hover:bg-orange-400 hover:shadow-md
+                                                        dark:bg-orange-900 dark:hover:bg-prange-600
+                                                        cursor-pointer"
+                                                    size={16}
+                                                />
+                                            </Link>
+                                            <Link className='px-1' to={`/delMyCurrency/${transaction.id}`}>
+                                                <Trash2
+                                                    className="rounded-md border-1 border-gray-500 p-1 w-[30px] h-[30px]
+                                                        bg-red-100 hover:bg-red-400 hover:shadow-md
+                                                        dark:bg-red-950 dark:hover:bg-red-600
+                                                        cursor-pointer"
+                                                    size={16}
+                                                />
+                                            </Link>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}

@@ -25,8 +25,8 @@ const AuthProvider = ({ children }) => {
                     refresh_token: data.refresh,
                     user: username,
                 })
-            setLoadingUser(false);
             navigate('/powitanie');
+            setLoadingUser(false);
         };
 
         // Logout function
@@ -35,8 +35,8 @@ const AuthProvider = ({ children }) => {
             localStorage.removeItem('refresh_token');
             localStorage.removeItem('user');
             setUser(null);
-            setLoadingUser(false);
             navigate('/login');
+            setLoadingUser(false);
         };
 
         // Function to check if token is expired
