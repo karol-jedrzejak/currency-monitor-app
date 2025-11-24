@@ -223,12 +223,30 @@ class AddCurrencyTransaction(APIView):
     def post(self, request):
         data_mod = request.data.copy()
         data_mod['user']=request.user.id
-        #data_mod['created_at']=datetime.now()
         serializer = UserModCurrencyTransactionSerializer(data=data_mod)
 
         if serializer.is_valid():
+
+            currency_id = serializer.validated_data['currency'].id
+            amount = serializer.validated_data['amount']
+
+            # Obliczamy aktualne saldo użytkownika dla tej waluty
+            current_balance = UserCurrencyTransaction.objects.filter(
+                user=request.user.id,
+                currency_id=currency_id
+            ).aggregate(total=Sum('amount'))['total'] or 0
+
+            # Sprawdzamy czy kwota nie jest ujemna i większa niż saldo
+            if amount < 0 and abs(amount) > current_balance:
+                return Response(
+                    {"amount": ["Wpisana wartość ujemna jest wieksza niż twoje saldo."]},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            # zapisujemy transakcję
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

@@ -51,7 +51,6 @@ const MyCurrenciesAdd = () => {
         try {
             const response = await axiosInstance.get('/all_currencies')
             setCurrencies(response.data);
-            console.log(response.data);
         } catch (error) {
             console.error("Error fetching data:", error);
         }
@@ -63,14 +62,14 @@ const MyCurrenciesAdd = () => {
     },[]);
 
     const handleSubmit = async (e) => {
+        setErrors({});
         e.preventDefault();
         try {
             setLoading(true);
-            console.log(form)
             const response = await axiosInstance.post('/add_user_transaction/', form);
             navigate('/myCurrencies');
         } catch (error) {
-            console.error("Error fetching data:", error);
+            setErrors(error.response.data);
         } finally {
             setLoading(false);
         }
