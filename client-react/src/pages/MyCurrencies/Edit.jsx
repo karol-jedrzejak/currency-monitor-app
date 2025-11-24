@@ -19,7 +19,20 @@ import {Plus,MoveDown,MoveUp,X,Search } from 'lucide-react';
 
 const MyCurrenciesEdit = () => {
 
+    const [currencies, setCurrencies] = useState(null);
+
+    const fetch = async () => {
+/*         try {
+            const response = await axiosInstance.get('/user_transactions/summary')
+            setCurrencies(response.data);
+            console.log(response.data);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        } */
+    };
+
     useEffect(() => {
+        fetch()
     }, );
 
     return (

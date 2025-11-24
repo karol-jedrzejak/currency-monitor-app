@@ -7,7 +7,7 @@ import json,requests
 from .models import Currency,Country,UserCurrencyTransaction
 from .pagination import CustomPagination
 from .filters import CurrencyFilter,UserCurrencyFilter
-from .serializers import CurrencySerializer,CountrySerializer,StockPredictionSerializer,CurrencyIdSerializer,UserCurrencyTransactionSerializer,UserCurrencyTransactionSumSerializer
+from .serializers import CurrencySerializer,CountrySerializer,StockPredictionSerializer,CurrencyIdSerializer,UserCurrencyTransactionSerializer,UserCurrencyTransactionSumSerializer,UserModCurrencyTransactionSerializer
 
 from django.db.models import Exists, OuterRef,Sum
 from django.http import HttpResponse,JsonResponse,Http404
@@ -158,7 +158,12 @@ class CurrencyByCodeView(APIView):
         serializer = CurrencyIdSerializer(currencies, many=True)
         return Response(serializer.data)
 
-
+class AllCurrencies(APIView):
+    permission_classes = (IsAuthenticated,)
+    def get(self, request):
+        currencies = Currency.objects.all().order_by('name')
+        serializer = CurrencyIdSerializer(currencies, many=True)
+        return Response(serializer.data)
 
 class UserCurrencyTransactionViewSet(viewsets.ModelViewSet):
     """
@@ -177,12 +182,12 @@ class UserCurrencyTransactionViewSet(viewsets.ModelViewSet):
     #def perform_create(self, serializer):
         #serializer.save(user=self.request.user)
 
-    def create(self, request):
-        serializer = UserCurrencyTransactionSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(user=self.request.user)
-            return Response("ok", status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #def perform_create(self, request):
+        #serializer = UserCurrencyTransactionSerializer(data=request.data)
+        #if serializer.is_valid():
+        #    serializer.save(user=self.request.user)
+        #    return Response("ok", status=status.HTTP_201_CREATED)
+        #return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['get'])
     def summary(self, request):
@@ -211,6 +216,21 @@ class UserCurrencyTransactionViewSet(viewsets.ModelViewSet):
         serializer = UserCurrencyTransactionSumSerializer(data, many=True)
         return Response(serializer.data)
     
+
+
+class AddCurrencyTransaction(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    def post(self, request):
+        data_mod = request.data.copy()
+        data_mod['user']=request.user.id
+        #data_mod['created_at']=datetime.now()
+        serializer = UserModCurrencyTransactionSerializer(data=data_mod)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 

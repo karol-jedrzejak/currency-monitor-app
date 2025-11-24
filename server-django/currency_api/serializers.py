@@ -17,12 +17,31 @@ class SimpleCurrencySerializer(serializers.ModelSerializer):
             self._rates_cache = get_nbp_rates()
         return self._rates_cache.get(obj.code)
 
+
+
+
+
 class CountrySerializer(serializers.ModelSerializer):
     currencies = SimpleCurrencySerializer(many=True, read_only=True)
     class Meta:
         model = Country
        # fields ="__all__"
         fields = ['id', 'name','currencies','official_name','flag','region','ccn3']
+
+
+
+
+class SimpleCurrencySerializer(serializers.ModelSerializer):
+    rate = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Currency
+        fields = ['id', 'name', 'code', 'table', 'rate']
+
+    def get_rate(self, obj):
+        if not hasattr(self, "_rates_cache"):
+            self._rates_cache = get_nbp_rates()
+        return self._rates_cache.get(obj.code)
 
 class CurrencySerializer(serializers.ModelSerializer):
     countries = CountrySerializer(many = True, read_only = True)
@@ -46,8 +65,24 @@ class CurrencyIdSerializer(serializers.ModelSerializer):
         model = Currency
         fields = ['id', 'name', 'code']
 
+
+
+
+
+
+
+
+
 class UserCurrencyTransactionSerializer(serializers.ModelSerializer):
-    currency = CurrencyIdSerializer(read_only=True)
+    currency = CurrencyIdSerializer()
+
+    class Meta:
+        model = UserCurrencyTransaction
+        fields = ['id', 'currency', 'user','amount', 'created_at']
+
+
+class UserModCurrencyTransactionSerializer(serializers.ModelSerializer):
+    currency = serializers.PrimaryKeyRelatedField(queryset=Currency.objects.all())
 
     class Meta:
         model = UserCurrencyTransaction

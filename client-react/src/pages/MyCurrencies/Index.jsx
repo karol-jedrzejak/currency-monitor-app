@@ -52,7 +52,8 @@ const MyCurrenciesIndex = () => {
         }
         let data_transactions = [];
         let data_summary = [];
-        let data_rates = [];
+        let data_rates_a = [];
+        let data_rates_b = [];
 
         try {
             const response = await axiosInstance.get(`/user_transactions/?${urlParams}`)
@@ -69,18 +70,33 @@ const MyCurrenciesIndex = () => {
         }
 
         try {
-            const response = await axios.get("https://api.nbp.pl/api/exchangerates/tables/c/today/");
-            data_rates=response.data[0].rates;
+            const response = await axios.get("https://api.nbp.pl/api/exchangerates/tables/a/");
+            data_rates_a=response.data[0].rates;
+        } catch (err) {
+            console.error("Błąd:", err);
+        }
+
+        try {
+            const response = await axios.get("https://api.nbp.pl/api/exchangerates/tables/b/");
+            data_rates_b=response.data[0].rates;
         } catch (err) {
             console.error("Błąd:", err);
         }
 
         data_summary.forEach(item => {
-            let rate = data_rates.find(rate => rate.code === item.currency.code);       
+            let rate = data_rates_a.find(rate => rate.code === item.currency.code);       
             if(rate)
             {
-                item.current_rate = rate.ask;
-            }         
+                item.current_rate = rate.mid;
+            }   else {
+                rate = data_rates_b.find(rate => rate.code === item.currency.code);   
+                if(rate)  
+                {
+                    item.current_rate = rate.mid;  
+                } else{
+                    item.current_rate = 0;
+                }
+            }       
         });
 
         setTransactions(data_transactions);
@@ -254,7 +270,9 @@ const MyCurrenciesIndex = () => {
                                 <tr key={idx} className="text-gray-700 dark:text-gray-100 border-b-1 border-emerald-500">
                                     <td className='ps-3 pe-1 py-1 sm:px-6 sm:py-4'>{transaction.currency.name}</td>
                                     <td className='px-1 py-1 sm:px-6 sm:py-4 text-center'>{transaction.currency.code}</td>
-                                    <td className='px-1 py-1 sm:px-6 sm:py-4 text-center'>{transaction.amount}</td>
+                                    <td className='px-1 py-1 sm:px-6 sm:py-4 text-center'>
+                                        {transaction.amount > 0 ? '+' : ''}{transaction.amount}
+                                        </td>
                                     <td className='px-1 py-1 sm:px-6 sm:py-4 text-center'>{new Date(transaction.created_at).toLocaleString("pl-PL")}</td>
                                     <td className='text-center'>
                                         <div className='flex p-2'>
