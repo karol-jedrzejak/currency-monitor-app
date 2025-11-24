@@ -1,10 +1,9 @@
 import django_filters
 from django.db.models import Q
-from .models import Currency
+from .models import Currency,UserCurrencyTransaction
 
 class CurrencyFilter(django_filters.FilterSet):
     table = django_filters.CharFilter(field_name='table')
-    """ name = django_filters.CharFilter(field_name='name', lookup_expr="icontains", method='name_or_code') """
     name = django_filters.CharFilter(method='name_or_code')
     order_by = django_filters.OrderingFilter(fields=(
             ('name', 'name'),
@@ -28,4 +27,23 @@ class CurrencyFilter(django_filters.FilterSet):
     def name_or_code(self, queryset, name, value):
         return queryset.filter(
             Q(name__icontains=value) | Q(code__icontains=value)
+        )
+
+class UserCurrencyFilter(django_filters.FilterSet):
+    name = django_filters.CharFilter(method='name_or_code')
+    order_by = django_filters.OrderingFilter(
+        fields=(
+            ('created_at', 'created_at'),
+            ('currency__name', 'currency_name'),
+            ('currency__code', 'currency_code'),
+        )
+    )
+
+    class Meta:
+        model = UserCurrencyTransaction
+        fields = ["name"]
+    
+    def name_or_code(self, queryset, name, value):
+        return queryset.filter(
+            Q(currency__name__icontains=value) | Q(currency__code__icontains=value)
         )

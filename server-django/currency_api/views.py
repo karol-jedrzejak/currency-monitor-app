@@ -6,7 +6,7 @@ import json,requests
 
 from .models import Currency,Country,UserCurrencyTransaction
 from .pagination import CustomPagination
-from .filters import CurrencyFilter
+from .filters import CurrencyFilter,UserCurrencyFilter
 from .serializers import CurrencySerializer,CountrySerializer,StockPredictionSerializer,CurrencyIdSerializer,UserCurrencyTransactionSerializer,UserCurrencyTransactionSumSerializer
 
 from django.db.models import Exists, OuterRef,Sum
@@ -165,8 +165,11 @@ class UserCurrencyTransactionViewSet(viewsets.ModelViewSet):
     Standardowy CRUD + dodatkowy endpoint /summary/
     """
     queryset = UserCurrencyTransaction.objects.all()
+    pagination_class = CustomPagination
     serializer_class = UserCurrencyTransactionSerializer
+    #permission_classes = (permissions.AllowAny)
     permission_classes = (IsAuthenticated,)
+    filterset_class = UserCurrencyFilter
 
     def get_queryset(self):
         return UserCurrencyTransaction.objects.filter(user=self.request.user)

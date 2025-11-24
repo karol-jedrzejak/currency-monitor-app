@@ -52,6 +52,7 @@ const AllCurrencies = () => {
             try {
                 const response = await axiosInstance.get(`/currencies/?${urlParams}`);
                 setCurrencies(response.data);
+                console.log(response.data);
             } catch {
                 setError("Błąd przy pobieraniu danych.");
             }

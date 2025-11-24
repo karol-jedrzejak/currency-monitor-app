@@ -12,21 +12,50 @@ import LoadingFrame from '../../components/LoadingFrame';
 import TopCenter from '../../layout/TopCenter';
 import CenterCenter from '../../layout/CenterCenter';
 
-import {Search } from 'lucide-react';
+import Input from '../../components/Input';
+import Pagination from '../../components/Pagination';
+
+import {SquarePlus,MoveDown,MoveUp,X,Search } from 'lucide-react';
 
 const MyCurrenciesIndex = () => {
 
     const [transactions, setTransactions] = useState(null);
     const [summary, setSummary] = useState(null);
 
-    const fetch = async () => {
+    const [search, setSearch] = useState('');
+    const [params, setParams] = useState({
+        page_num: 1,
+        name: '',
+        order_by: "-created_at",
+    });
 
+    const updateParams = (update_params) => {
+        setParams(prev => {
+            const new_params = { ...prev, ...update_params };
+
+            if (prev.name !== new_params.name || prev.order_by !== new_params.order_by) {
+                new_params.page_num = 1;
+            }
+
+            return new_params;
+        });
+    };
+
+
+
+    const fetch = async () => {
+        let urlParams = "";
+        for (const param in params) {
+            if (params[param] !== null && params[param] !== "") {
+                urlParams += `${param}=${params[param]}&`;
+            }
+        }
         let data_transactions = [];
         let data_summary = [];
         let data_rates = [];
 
         try {
-            const response = await axiosInstance.get('/user_transactions/')
+            const response = await axiosInstance.get(`/user_transactions/?${urlParams}`)
             data_transactions=response.data;
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -61,12 +90,20 @@ const MyCurrenciesIndex = () => {
 
     useEffect(() => {
         fetch();
-    }, []);
+    }, [params]);
 
 
+    const handleSearch = (e) => {
+        setSearch(e.target.value);
+    };
+
+    const handleEnter = (e) => {
+        if (e.key === 'Enter') updateParams({ name: search });
+    };
     return (
     <>
-        <TopCenter classNameIn={"lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0 space-y-4"}>
+        <TopCenter /* classNameIn={"xl:grid xl:grid-cols-2 xl:gap-4 xl:space-y-0 space-y-4"} */>
+            <div className='xl:grid xl:grid-cols-2 xl:gap-4 xl:space-y-0 space-y-4'>
             {summary && summary.length!=0 ? (
                 <div>
                 <Frame>
@@ -76,10 +113,10 @@ const MyCurrenciesIndex = () => {
                     <table className="table-auto min-w-full">
                         <thead>
                             <tr className='bg-emerald-100 text-gray-700 dark:bg-emerald-800 dark:text-gray-200 text-sm sm:text-base text-center' >
-                                <th className='cursor-pointer ps-3 pe-1 py-1 sm:px-6 sm:py-3 rounded-l-lg'>Nazwa</th>
-                                <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3'>Ilość</th>
-                                <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3'>Wartość w PLN</th>
-                                <th className='cursor-pointer ps-1 pe-3 py-1 sm:px-6 sm:py-3 rounded-r-lg'></th>
+                                <th className='ps-3 pe-1 py-1 sm:px-6 sm:py-3 rounded-l-lg'>Nazwa</th>
+                                <th className='ps-1 pe-3 py-1 sm:px-6 sm:py-3'>Ilość</th>
+                                <th className='ps-1 pe-3 py-1 sm:px-6 sm:py-3'>Wartość w PLN</th>
+                                <th className='ps-1 pe-3 py-1 sm:px-6 sm:py-3 rounded-r-lg'></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -114,11 +151,129 @@ const MyCurrenciesIndex = () => {
             )}
             {transactions && summary.length!=0 ? (
                 <Frame>
-                    u wszystkie
+                    <div className='flex flex-col sm:flex-row items-center justify-between mb-4'>
+                        <h2 className='text-center text-emerald-800 dark:text-emerald-300 text-lg font-bold mx-4'>
+                            WSZYSTKIE TRANSAKCJE
+                        </h2>
+
+                        <div className='flex flex-col sm:flex-row items-center'>
+                            <Input
+                                label="Wyszukaj:"
+                                type="text"
+                                name="name"
+                                value={search}
+                                onChange={handleSearch}
+                                onKeyDown={handleEnter}
+                            />
+
+                            <div className='flex flex-row items-center'>
+                                <Search
+                                    className="rounded-md border-1 border-gray-500 p-2 w-[40px] h-[40px]
+                                        bg-emerald-100 hover:bg-emerald-400 hover:shadow-md
+                                        dark:bg-gray-800 dark:hover:bg-emerald-600
+                                        cursor-pointer"
+                                    onClick={() => updateParams({ name: search })}
+                                />
+
+                                <X
+                                    className="ms-2 rounded-md border-1 border-gray-500 p-2 w-[40px] h-[40px]
+                                        bg-emerald-100 hover:bg-emerald-400 hover:shadow-md
+                                        dark:bg-gray-800 dark:hover:bg-emerald-600
+                                        cursor-pointer"
+                                    onClick={() => {
+                                        setSearch('');
+                                        updateParams({ name: '' });
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <table className="table-auto min-w-full">
+                        <thead>
+                            <tr className='bg-emerald-100 text-gray-700 dark:bg-emerald-800 dark:text-gray-200 text-center'>
+                                <th
+                                    className='cursor-pointer ps-3 pe-1 py-1 sm:px-6 sm:py-3'
+                                    onClick={() =>
+                                        updateParams({
+                                            order_by:
+                                                params.order_by === "currency_name" ? "-currency_name" : "currency_name",
+                                        })
+                                    }
+                                >
+                                    <div className='flex flex-row items-center'>
+                                        <div>Nazwa</div>
+                                        {params.order_by === "currency_name" && <MoveUp size={14} />}
+                                        {params.order_by === "-currency_name" && <MoveDown size={14} />}
+                                    </div>
+                                </th>
+                                <th
+                                    className='cursor-pointer px-1 py-1 sm:px-6 sm:py-3'
+                                    onClick={() =>
+                                        updateParams({
+                                            order_by:
+                                                params.order_by === "currency_code" ? "-currency_code" : "currency_code",
+                                        })
+                                    }
+                                >
+                                    <div className='flex flex-row items-center min-w-[50px]'>
+                                        <div>Kod</div>
+                                        {params.order_by === "currency_code" && <MoveUp size={14} />}
+                                        {params.order_by === "-currency_code" && <MoveDown size={14} />}
+                                    </div>
+                                </th>
+                                <th className='px-1 py-1 sm:px-6 sm:py-3'>Zmiana</th>
+                                <th
+                                    className='cursor-pointer px-1 py-1 sm:px-6 sm:py-3'
+                                    onClick={() =>
+                                        updateParams({
+                                            order_by:
+                                                params.order_by === "created_at" ? "-created_at" : "created_at",
+                                        })
+                                    }
+                                >
+                                    <div className='flex flex-row items-center'>
+                                        <div>Data</div>
+                                        {params.order_by === "created_at" && <MoveUp size={14} />}
+                                        {params.order_by === "-created_at" && <MoveDown size={14} />}
+                                    </div>
+                                </th>
+                                <th className='px-1 py-1 sm:px-6 sm:py-3'></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {transactions.results.map((transaction, idx) => (
+                                <tr key={idx} className="text-gray-700 dark:text-gray-100 border-b-1 border-emerald-500">
+                                    <td className='ps-3 pe-1 py-1 sm:px-6 sm:py-4'>{transaction.currency.name}</td>
+                                    <td className='px-1 py-1 sm:px-6 sm:py-4 text-center'>{transaction.currency.code}</td>
+                                    <td className='px-1 py-1 sm:px-6 sm:py-4 text-center'>{transaction.amount}</td>
+                                    <td className='px-1 py-1 sm:px-6 sm:py-4 text-center'>{new Date(transaction.created_at).toLocaleString("pl-PL")}</td>
+                                    <td className='text-center'>
+                                        <Link to={`/currency/${transaction.id}`}>
+                                            <Search
+                                                className="rounded-md border-1 border-gray-500 p-1 w-[30px] h-[30px]
+                                                    bg-emerald-100 hover:bg-emerald-400 hover:shadow-md
+                                                    dark:bg-gray-800 dark:hover:bg-emerald-600
+                                                    cursor-pointer"
+                                                size={16}
+                                            />
+                                        </Link>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    <Pagination
+                        prev={transactions.prev}
+                        next={transactions.next}
+                        pages={transactions.number_of_pages}
+                        current={transactions.current}
+                        fetch={(params) => updateParams(params)}
+                    />
                 </Frame>
             ):(
                 <LoadingFrame/>
             )}
+            </div>
         </TopCenter>
     </>
     );
