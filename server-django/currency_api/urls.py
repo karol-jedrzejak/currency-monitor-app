@@ -9,7 +9,11 @@ router.register('countries', views.CountryViewSet, basename='countries')
 router.register('user_transactions', views.UserCurrencyTransactionViewSet, basename='user_transactions')
 
 urlpatterns = [
+    path("get_user_transaction/<int:id>", views.GetCurrencyTransaction.as_view(), name="get_user_transaction"),
     path("add_user_transaction/", views.AddCurrencyTransaction.as_view(), name="add_user_transaction"),
+    path("update_user_transaction/<int:id>", views.UpdateCurrencyTransaction.as_view(), name="update_user_transaction"),
+    path("del_user_transaction/<int:id>", views.DelCurrencyTransaction.as_view(), name="del_user_transaction"),
+
     path("all_currencies/", views.AllCurrencies.as_view(), name="all_currencies"),
     path("stock_prediction/", views.StockPrediction.as_view(), name="stock_prediction"),
     path("currency_by_code/", views.CurrencyByCodeView.as_view(), name="currency_by_code"),

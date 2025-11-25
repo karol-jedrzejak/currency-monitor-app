@@ -218,9 +218,29 @@ class UserCurrencyTransactionViewSet(viewsets.ModelViewSet):
     
 
 
+
+
+
+
+
+
+
+class GetCurrencyTransaction(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, id):
+        try:
+            obj = UserCurrencyTransaction.objects.get(id=id)
+        except UserCurrencyTransaction.DoesNotExist:
+            return Response({"detail": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UserCurrencyTransactionSerializer(instance=obj)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class AddCurrencyTransaction(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    def post(self, request):
+    def post(self, request,id):
         data_mod = request.data.copy()
         data_mod['user']=request.user.id
         serializer = UserModCurrencyTransactionSerializer(data=data_mod)
@@ -248,7 +268,52 @@ class AddCurrencyTransaction(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class UpdateCurrencyTransaction(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    def put(self, request, id):
+        try:
+            obj = UserCurrencyTransaction.objects.get(id=id)
+        except UserCurrencyTransaction.DoesNotExist:
+            return Response({"detail": "Not found"}, status=status.HTTP_404_NOT_FOUND)
 
+        serializer = UserModCurrencyTransactionSerializer(instance=obj, data=request.data)
+
+        if serializer.is_valid():
+            currency_id = serializer.validated_data['currency'].id
+            amount = serializer.validated_data['amount']
+
+            # Obliczamy aktualne saldo użytkownika dla tej waluty
+            current_balance = UserCurrencyTransaction.objects.filter(
+                user=request.user.id,
+                currency_id=currency_id
+            ).aggregate(total=Sum('amount'))['total'] or 0
+
+            # Sprawdzamy czy kwota nie jest ujemna i większa niż saldo
+            if amount < 0 and abs(amount) > current_balance:
+                return Response(
+                    {"amount": ["Wpisana wartość ujemna jest wieksza niż twoje saldo."]},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class DelCurrencyTransaction(APIView):
+    permission_classes = (AllowAny,)
+
+    def delete(self, request, id):
+        try:
+            obj = UserCurrencyTransaction.objects.get(id=id)
+        except UserCurrencyTransaction.DoesNotExist:
+            return Response({"error": "Wpis nie istnieje"}, status=status.HTTP_404_NOT_FOUND)
+
+        obj.delete()
+        return Response({"sucess": "Usunięto wpis"}, status=status.HTTP_204_NO_CONTENT)
 
 
 
