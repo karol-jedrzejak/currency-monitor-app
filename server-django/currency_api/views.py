@@ -434,9 +434,9 @@ class CurrencyClassView(mixins.RetrieveModelMixin,mixins.UpdateModelMixin,mixins
     
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
- """
 
-""" # Generic Views
+        
+          # Generic Views
 class CurrenciesClassView(generics.ListCreateAPIView):
     queryset = Currency.objects.all()
     serializer_class = CurrencySerializer
