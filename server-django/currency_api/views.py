@@ -240,7 +240,7 @@ class GetCurrencyTransaction(APIView):
 
 class AddCurrencyTransaction(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    def post(self, request,id):
+    def post(self, request):
         data_mod = request.data.copy()
         data_mod['user']=request.user.id
         serializer = UserModCurrencyTransactionSerializer(data=data_mod)
@@ -268,6 +268,9 @@ class AddCurrencyTransaction(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
     
 class UpdateCurrencyTransaction(APIView):
     permission_classes = (permissions.IsAuthenticated,)

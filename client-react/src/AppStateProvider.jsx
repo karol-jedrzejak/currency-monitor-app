@@ -1,8 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { Axis3D } from 'lucide-react';
-import axiosInstance from './axiosInstance';
+import { createContext, useState } from 'react';
 
 // Create the Auth Context
 const AppStateContext = createContext();
@@ -36,24 +32,8 @@ const AppStateProvider = ({ children }) => {
         document.documentElement.classList.toggle("dark")
     }
 
-    const [menu, setMenu] = useState({
-        name: "Top",
-        active: true,
-        link: "#Top"
-    },
-    {
-        name: "Waluty",
-        active: false,
-        link: "#Waluty"
-    },
-    {
-        name: "Moje Waluty",
-        active: false,
-        link: "#MojeWaluty"
-    });
-
     return (
-        <AppStateContext.Provider value={{ darkTheme,changeTheme,menu,setMenu }}>
+        <AppStateContext.Provider value={{ darkTheme,changeTheme }}>
             {children}
         </AppStateContext.Provider>
     );

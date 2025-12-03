@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Frame = ({ children, className }) => {
     return (
         <div className={`

@@ -1,5 +1,3 @@
-import React, { useState } from 'react';
-
 import Input from '../components/Input';
 import Button from '../components/Button';
 import Frame from '../components/Frame';
@@ -10,6 +8,7 @@ import { Loader } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from "../AuthProvider";
+import { useState } from "react";
 
 const Login = () => {
     const authData = useContext(AuthContext);

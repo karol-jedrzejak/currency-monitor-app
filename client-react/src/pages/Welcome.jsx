@@ -1,5 +1,3 @@
-import React from "react"
-
 import TopCenter from '../layout/TopCenter';
 import Frame from '../components/Frame';
 

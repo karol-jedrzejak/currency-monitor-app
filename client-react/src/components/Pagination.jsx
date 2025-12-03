@@ -1,10 +1,7 @@
-import React, { useState } from "react";
 import { ChevronRight,ChevronLeft,ChevronLast,ChevronFirst } from "lucide-react";
 
 const Pagination = ({pages,current,fetch}) => {
     
-
-
     const normal = "border-1 border-gray-800 dark:border-gray-100 rounded-md text-gray-700 hover:text-gray-900 hover:bg-emerald-300 hover:shadow-md dark:text-gray-300 dark:hover:text-gray-900 dark:hover:bg-emerald-500 dark:hover:shadow-md dark:shadow-emerald-900 cursor-pointer w-[26px] h-[26px] flex justify-center items-center";
     const active = "border-1 border-emerald-800 dark:border-gray-100 rounded-md text-gray-700 hover:text-gray-900 hover:bg-emerald-300 hover:shadow-md dark:text-gray-300 dark:hover:text-gray-900 dark:hover:bg-emerald-500 dark:hover:shadow-md dark:shadow-emerald-900 cursor-pointer w-[26px] h-[26px] flex justify-center items-center bg-emerald-200 dark:bg-emerald-800";
     const disabled = "border-1 border-gray-800 dark:border-gray-500 rounded-md text-gray-700 dark:text-gray-400 dark:shadow-emerald-900 w-[26px] h-[26px] flex justify-center items-center bg-gray-200 dark:bg-gray-800 cursor-not-allowed opacity-50";

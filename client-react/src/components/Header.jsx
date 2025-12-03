@@ -10,7 +10,7 @@ const Header = () => {
   const authData = useContext(AuthContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
-  const { hash, pathname, search } = location;
+  const { pathname } = location;
 
   const activeClass = "text-sm font-medium px-3 py-2 rounded-xl text-gray-700 hover:text-gray-900 bg-emerald-100 border-1 border-emerald-200 hover:border-emerald-300 hover:bg-emerald-300 hover:shadow-md dark:text-gray-300 dark:bg-gray-900 dark:hover:text-gray-900 dark:hover:bg-emerald-500 dark:hover:shadow-md dark:shadow-emerald-900";
   const notActiveClass = "text-sm font-medium px-3 py-2 rounded-xl text-gray-700 hover:text-gray-900 hover:bg-emerald-300 hover:shadow-md dark:text-gray-300 dark:hover:text-gray-900 dark:hover:bg-emerald-500 dark:hover:shadow-md dark:shadow-emerald-900";

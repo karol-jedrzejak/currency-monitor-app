@@ -1,5 +1,3 @@
-import React from 'react';
-
 const TopCenter = ({ children,classNameIn,classNameOut }) => {
     return (
         <div className={`flex-grow flex justify-center ${classNameOut || ''}`}>

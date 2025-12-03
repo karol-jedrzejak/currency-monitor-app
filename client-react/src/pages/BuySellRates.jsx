@@ -1,5 +1,4 @@
-import React from 'react';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from "react-router-dom"
 
 import axios from 'axios';  
@@ -24,7 +23,7 @@ const BuySellRates = () => {
         let data = []
 
         try {
-            const response = await axios.get("https://api.nbp.pl/api/exchangerates/tables/c/today/");
+            const response = await axios.get("https://api.nbp.pl/api/exchangerates/tables/c/");
             data=response.data[0].rates;
         } catch (err) {
             setError("Błąd przy pobieraniu danych.");

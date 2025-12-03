@@ -86,7 +86,7 @@ class UserModCurrencyTransactionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserCurrencyTransaction
-        fields = ['id', 'currency', 'user','amount', 'created_at']
+        fields = ['id', 'currency', 'user', 'amount', 'created_at']
 
 
 class UserCurrencyTransactionSumSerializer(serializers.Serializer):

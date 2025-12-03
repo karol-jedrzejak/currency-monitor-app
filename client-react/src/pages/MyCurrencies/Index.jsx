@@ -1,16 +1,13 @@
-import React from 'react';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from "react-router-dom"
 
 import axios from 'axios';  
 import axiosInstance from '../../axiosInstance';
 
 import Frame from '../../components/Frame';
-import ErrorFrame from '../../components/ErrorFrame';
 import LoadingFrame from '../../components/LoadingFrame';
 
 import TopCenter from '../../layout/TopCenter';
-import CenterCenter from '../../layout/CenterCenter';
 
 import Input from '../../components/Input';
 import Pagination from '../../components/Pagination';
@@ -118,7 +115,7 @@ const MyCurrenciesIndex = () => {
     };
     return (
     <>
-        <TopCenter /* classNameIn={"xl:grid xl:grid-cols-2 xl:gap-4 xl:space-y-0 space-y-4"} */>
+        <TopCenter >
             <div className='xl:grid xl:grid-cols-2 xl:gap-4 xl:space-y-0 space-y-4'>
             {summary && summary.length!=0 ? (
                 <div>
