@@ -7,8 +7,8 @@ COUNTRIES_API = "https://restcountries.com/v3.1/all?fields=name,flags,region,cca
 
 COUNTRIES_CURRENCY_RELATION_API = "https://restcountries.com/v3.1/currency/"
 
-ADD_COUNTRY_API_URL = "http://127.0.0.1:8000/api/v1/countries_vs/"
-ADD_CURRENCY_API_URL = "http://127.0.0.1:8000/api/v1/currencies_vs/"
+ADD_COUNTRY_API_URL = "http://127.0.0.1:8000/api/v1/countries/"
+ADD_CURRENCY_API_URL = "http://127.0.0.1:8000/api/v1/currencies/"
 
 blad = None
 dane_kursow_a = {}

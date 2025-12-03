@@ -60,7 +60,7 @@ const MyCurrenciesAdd = () => {
         e.preventDefault();
         try {
             setLoading(true);
-            const response = await axiosInstance.post('/add_user_transaction/', form);
+            const response = await axiosInstance.post('/user_transaction/', form);
             navigate('/myCurrencies');
         } catch (error) {
             setErrors(error.response.data);

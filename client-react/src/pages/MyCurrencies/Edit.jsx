@@ -46,7 +46,7 @@ const MyCurrenciesAdd = () => {
 
     const fetch = async () => {
         try {
-            const response = await axiosInstance.get('/get_user_transaction/'+id)
+            const response = await axiosInstance.get('/user_transaction/'+id)
             setForm({
                 ...form,
                 id: response.data.id,
@@ -76,7 +76,7 @@ const MyCurrenciesAdd = () => {
         e.preventDefault();
         try {
             setLoading(true);
-            const response = await axiosInstance.put('/update_user_transaction/'+id, form);
+            const response = await axiosInstance.put('/user_transaction/'+id+'/', form);
             navigate('/myCurrencies');
         } catch (error) {
             setErrors(error.response.data);

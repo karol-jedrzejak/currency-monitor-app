@@ -24,7 +24,7 @@ const MyCurrenciesAdd = () => {
 
     const fetch = async () => {
         try {
-            const response = await axiosInstance.get('/get_user_transaction/'+id)
+            const response = await axiosInstance.get('/user_transaction/'+id)
             setTransaction(response.data);
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -38,7 +38,7 @@ const MyCurrenciesAdd = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axiosInstance.delete('/del_user_transaction/'+id);
+            const response = await axiosInstance.delete('/user_transaction/'+id+'/');
             navigate('/myCurrencies');
         } catch (error) {
             setErrors(error.response.data);

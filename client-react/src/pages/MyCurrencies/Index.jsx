@@ -53,14 +53,14 @@ const MyCurrenciesIndex = () => {
         let data_rates_b = [];
 
         try {
-            const response = await axiosInstance.get(`/user_transactions/?${urlParams}`)
+            const response = await axiosInstance.get(`/user_transaction/?${urlParams}`)
             data_transactions=response.data;
         } catch (error) {
             console.error("Error fetching data:", error);
         }
         
         try {
-            const response = await axiosInstance.get('/user_transactions/summary')
+            const response = await axiosInstance.get('/user_transaction/summary')
             data_summary=response.data;
         } catch (error) {
             console.error("Error fetching data:", error);

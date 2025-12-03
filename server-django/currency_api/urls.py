@@ -6,31 +6,13 @@ from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register('currencies', views.CurrenciesViewSet, basename='currencies')
 router.register('countries', views.CountryViewSet, basename='countries')
-router.register('user_transactions', views.UserCurrencyTransactionViewSet, basename='user_transactions')
+router.register("user_transaction",  views.UserCurrencyTransactionViewSet, basename="user_transaction")
 
 urlpatterns = [
-    path("get_user_transaction/<int:id>", views.GetCurrencyTransaction.as_view(), name="get_user_transaction"),
-    path("add_user_transaction/", views.AddCurrencyTransaction.as_view(), name="add_user_transaction"),
-    path("update_user_transaction/<int:id>", views.UpdateCurrencyTransaction.as_view(), name="update_user_transaction"),
-    path("del_user_transaction/<int:id>", views.DelCurrencyTransaction.as_view(), name="del_user_transaction"),
-
     path("all_currencies/", views.AllCurrencies.as_view(), name="all_currencies"),
     path("stock_prediction/", views.StockPrediction.as_view(), name="stock_prediction"),
     path("currency_by_code/", views.CurrencyByCodeView.as_view(), name="currency_by_code"),
-    path("register/", UserViews.UserRegister.as_view(), name="account-create"),
-    path('', include(router.urls)),  # Include the router URLs
+    path('', include(router.urls)), 
 ]
 
-
-"""  
-    path("register/", UserViews.UserRegister.as_view(), name="account-create"),
-    path("countries_html", views.test_countries, name="test_countries"),
-    path("currencies_html", views.test_currencies, name="test_currencies"), """
-
-"""
-    path("types_cv/", views.CurrenciesClassView.as_view(), name="type_cv"),
-    path("types_cv/<int:id>/", views.CurrencyClassView.as_view(), name="type_cv"),
-"""
-""" path("nbp_api", views.nbp_api, name="nbp_api"),
-    path("types", views.currency_types, name="types"),
-    path("types/<int:id>/", views.currency_type, name="type"), """
+#path("register/", UserViews.UserRegister.as_view(), name="account-create"),
