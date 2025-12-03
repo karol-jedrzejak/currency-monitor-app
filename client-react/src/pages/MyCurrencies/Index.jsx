@@ -160,8 +160,20 @@ const MyCurrenciesIndex = () => {
                 </Frame>
                 </div>
             ):(
-                <LoadingFrame/>
+                <>
+                    {summary ? (
+                    <>
+
+                    </>
+                    ):(
+                    <>
+                        <LoadingFrame/>
+                    </>
+                    )}
+                </>
             )}
+
+
             {transactions && summary.length!=0 ? (
                 <Frame>
                     <div className='flex flex-col sm:flex-row items-center justify-between mb-4'>
@@ -306,7 +318,25 @@ const MyCurrenciesIndex = () => {
                     />
                 </Frame>
             ):(
-                <LoadingFrame/>
+                <>
+                    {summary ? (
+                        <Frame>
+                            <div className='flex flex-col sm:flex-row items-center justify-between'>
+                                <Link to="/addMyCurrency" className='w-[40px]'>
+                                    <Plus
+                                        className="rounded-md border-1 border-gray-500 p-2 w-[40px] h-[40px]
+                                            bg-emerald-100 hover:bg-emerald-400 hover:shadow-md
+                                            dark:bg-gray-800 dark:hover:bg-emerald-600
+                                            cursor-pointer"
+                                    />
+                                </Link>
+                                <div className='ps-2'>Dodaj pierwszą walutę</div>
+                            </div>
+                        </Frame>
+                    ):(
+                        <LoadingFrame/>
+                    )}
+                </>
             )}
             </div>
         </TopCenter>

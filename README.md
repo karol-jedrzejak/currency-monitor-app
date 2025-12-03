@@ -13,15 +13,13 @@ The application monitors current exchange rates retrieved from the National Bank
 To Setup backend:
 ```
 cd server-django
+copy env.example env.
+python -m venv venv
 venv/Scripts/activate
+pip install -r requirements.txt
 docker-compose up
 python manage.py makemigrations
 python manage.py migrate
-```
-
-after setting up database run python script (it will import data from external api to docker database):
-```
-server-django\import_script\import_countries_and_currencies_list_from_api.py
 ```
 
 To start Server:
@@ -33,8 +31,26 @@ docker-compose start
 python manage.py runserver
 ```
 
+after setting up database run python script and it will import data from external api to docker database (backend server must be running):
+```
+server-django\import_script\import_countries_and_currencies_list_from_api.py
+```
+
+Enter url and register user
+```
+http://127.0.0.1:8000/api/v1/register/
+```
+
+To Setup Frontend:
+```
+cd client-react
+npm install
+```
+
 To run Frontend:
 ```
 cd client-react
 npm run dev
 ```
+
+Login with previously registered user
